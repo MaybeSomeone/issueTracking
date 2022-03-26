@@ -49,23 +49,35 @@ class FeedbackViewController: BaseViewController {
             guard let weakself = self else { return }
             switch index {
             case 0 : //Create Blank Form
+                let editVC = EditFromViewController ()
+                editVC.hidesBottomBarWhenPushed = true
+                editVC.Complete = {() in
+                    self?.tableView.reloadData()
+                }
+               
+                self?.navigationController?.pushViewController(editVC, animated: true)
                 break
+
             case 1 ://Copy Existing Form
                 break
             case 2 ://Create by Template
                 
                 let names = ["Event","Raffle","Business","Project","Other","Event","Raffle","Business","Project","Other"]
                 let templateView = CreateByTemplateView()
-                //添加假数据 添加数据库
-                for i in 0...names.count - 1 {
-                    let  model = CreateByTemplateModel()
-                    model.ID = "\(i + 1)"
-                    model.title = names[i]
-                    model.descriptio = "This is a requirement"
-                    model.createDate = Calendar.current.startOfDay(for: Date())
+//                //添加假数据 添加数据库
+//                for i in 0...names.count - 1 {
+//                    let  model = CreateByTemplateModel()
+//                    model.ID = "\(i + 1)"
+//                    model.title = names[i]
+//                    model.descriptio = "This is a requirement"
+//                    model.createDate = Calendar.current.startOfDay(for: Date())
+//                    templateView.dataArr.append(model)
+//                    //添加到本地数据库 后期可换成接口
+//                    RealmManagerTool.shareManager().addObject(object: model, .template)
+//                }
+                let data = RealmManagerTool.shareManager().queryObjects(objectClass: CreateByTemplateModel.self, .template)
+                for model in data.reversed() {
                     templateView.dataArr.append(model)
-                    //添加到本地数据库 后期可换成接口
-                    RealmManagerTool.shareManager().addObject(object: model, .template)
                 }
                 
                 templateView.createByTemplateViewComplete = { [weak self] templateModel in
@@ -107,17 +119,21 @@ class FeedbackViewController: BaseViewController {
         
         let titles = ["Event Feedback","Raffle Feedback","Business Feedback","Project Feedback","Other Feedback"]
         //添加假数据 添加数据库
-        for i in 0...titles.count - 1  {
-            let  model = FeedbackModel()
-            model.ID = "\(i + 1)"
-            model.title = titles[i]
-            model.status = "1"
-            model.author = "Currie"
-            model.createDate = Calendar.current.startOfDay(for: Date())
-            model.descriptio = "feedback description"
+//        for i in 0...titles.count - 1  {
+//            let  model = FeedbackModel()
+//            model.ID = "\(i + 1)"
+//            model.title = titles[i]
+//            model.status = "1"
+//            model.author = "Currie"
+//            model.createDate = Calendar.current.startOfDay(for: Date())
+//            model.descriptio = "feedback description"
+//            dataArr.append(model)
+//            //添加到本地数据库 后期可换成接口
+//            RealmManagerTool.shareManager().addObject(object: model, .feedback)
+//        }
+        let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
+        for model in data.reversed() {
             dataArr.append(model)
-            //添加到本地数据库 后期可换成接口
-            RealmManagerTool.shareManager().addObject(object: model, .feedback)
         }
         tableView.reloadData()
     }

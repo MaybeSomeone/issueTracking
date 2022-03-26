@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "filename" : "feedback_form_ic_checkbox_selet.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "feedback_form_ic_checkbox_selet@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "feedback_form_ic_checkbox_selet@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

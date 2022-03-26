@@ -68,7 +68,6 @@
 		64BE5FC827E81E550050059D /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BE5FBF27E81E550050059D /* AlertView.swift */; };
 		64BE5FC927E81E550050059D /* SetFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BE5FC027E81E550050059D /* SetFormView.swift */; };
 		64BE5FCA27E81E550050059D /* EditTypeTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BE5FC127E81E550050059D /* EditTypeTabelViewCell.swift */; };
-		64BE5FCC27E81E5D0050059D /* FromTypeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BE5FCB27E81E5D0050059D /* FromTypeModel.swift */; };
 		64BE5FCF27E81E6E0050059D /* EditFromViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BE5FCD27E81E6E0050059D /* EditFromViewController.swift */; };
 		64BE5FD027E81E6E0050059D /* FormReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BE5FCE27E81E6E0050059D /* FormReportViewController.swift */; };
 		64CB74DE27D84F19006D262D /* CreateByTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CB74DD27D84F19006D262D /* CreateByTemplateView.swift */; };
@@ -149,7 +148,6 @@
 		64BE5FBF27E81E550050059D /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		64BE5FC027E81E550050059D /* SetFormView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SetFormView.swift; sourceTree = "<group>"; };
 		64BE5FC127E81E550050059D /* EditTypeTabelViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditTypeTabelViewCell.swift; sourceTree = "<group>"; };
-		64BE5FCB27E81E5D0050059D /* FromTypeModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FromTypeModel.swift; sourceTree = "<group>"; };
 		64BE5FCD27E81E6E0050059D /* EditFromViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EditFromViewController.swift; sourceTree = "<group>"; };
 		64BE5FCE27E81E6E0050059D /* FormReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormReportViewController.swift; sourceTree = "<group>"; };
 		64CB74DD27D84F19006D262D /* CreateByTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateByTemplateView.swift; sourceTree = "<group>"; };
@@ -377,7 +375,6 @@
 		64B69C6C27C4832F00EDD866 /* M */ = {
 			isa = PBXGroup;
 			children = (
-				64BE5FCB27E81E5D0050059D /* FromTypeModel.swift */,
 				646B51AC27D7474E00FB923B /* FeedbackModel.swift */,
 				64CB74E127D89FC1006D262D /* CreateByTemplateModel.swift */,
 			);
@@ -663,7 +660,6 @@
 				64B69C2827C47F1000EDD866 /* AppDelegate.swift in Sources */,
 				640F12C327CEFD5100D066E0 /* AddNewIssueVC.swift in Sources */,
 				646B51BD27D75EA100FB923B /* MLMenuCell.m in Sources */,
-				64BE5FCC27E81E5D0050059D /* FromTypeModel.swift in Sources */,
 				64BE5FCA27E81E550050059D /* EditTypeTabelViewCell.swift in Sources */,
 				646B51BC27D75EA100FB923B /* MLMenuItem.m in Sources */,
 				64BE5FC527E81E550050059D /* ImageChoiceColl.swift in Sources */,

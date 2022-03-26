@@ -11,7 +11,7 @@ import Photos
 
 class FormReportViewController: BaseViewController,UITableViewDelegate,UITableViewDataSource{
     
-    private var dataModel = FromTypeModel()
+    private var dataModel = FeedbackModel()
 
     private lazy var table : UITableView = {
         

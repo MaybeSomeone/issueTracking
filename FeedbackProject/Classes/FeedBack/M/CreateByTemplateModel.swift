@@ -22,4 +22,6 @@ class CreateByTemplateModel: Object {
     override class func primaryKey() -> String? {
         return "ID"
     }
+    dynamic var Child = List<FromChildTypeModel>()
+
 }

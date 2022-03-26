@@ -12,6 +12,10 @@ typealias CustomizeClick = ()->Void
 
 class EditConfirmTabelViewCell: UITableViewCell {
     
+    var block : CustomizeClick?
+
+    var SaveTemplateblock: (_ isSelected: Bool) -> Void = {_ in}
+
      lazy var seletBtn: UIButton = {
         let seletBtn = UIButton()
         seletBtn.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
@@ -24,6 +28,7 @@ class EditConfirmTabelViewCell: UITableViewCell {
     
     @objc func seletBtnClick(_: UIButton) {
         seletBtn.isSelected = !(seletBtn.isSelected)
+        self.SaveTemplateblock(seletBtn.isSelected)
     }
      lazy var titleLabel: UILabel = {
         let lab = UILabel()
@@ -46,7 +51,6 @@ class EditConfirmTabelViewCell: UITableViewCell {
 
     }()
     
-    var block : CustomizeClick?
 
     @objc func customizeClick() {
         

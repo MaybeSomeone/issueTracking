@@ -15,17 +15,21 @@ struct ComponentMode {
     var multipleChoiceList: Array<String>?
 }
 
-var dataSource: Array<ComponentMode> = [
-    ComponentMode(type: "Label", title: "Title"),
-    ComponentMode(type: "Textbox", title: "Comments"),
-    ComponentMode(type: "DropDown", title: "Projects", dropDownList: ["Infosys", "HSBC", "HK Jocky", "HuaWei"]),
-    ComponentMode(type: "Single", title: "Sex", singleChoiceList: ["Male", "Female", "Medum", "Test"]),
-    ComponentMode(type: "Multi", title: "Preference", multipleChoiceList: ["Dark", "Light", "Dust", "Normal"]),
-    ComponentMode(type: "RichText", title: "Advice"),
-    ComponentMode(type: "Image", title: "Pic"),
-]
+
 
 class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    var feedBackMode:FeedbackModel
+    
+    var dataSource: Array<ComponentMode> = [
+//        ComponentMode(type: "Label", title: "Title"),
+//        ComponentMode(type: "Textbox", title: "Comments"),
+//        ComponentMode(type: "DropDown", title: "Projects", dropDownList: ["Infosys", "HSBC", "HK Jocky", "HuaWei"]),
+//        ComponentMode(type: "Single", title: "Sex", singleChoiceList: ["Male", "Female", "Medum", "Test"]),
+//        ComponentMode(type: "Multi", title: "Preference", multipleChoiceList: ["Dark", "Light", "Dust", "Normal"]),
+//        ComponentMode(type: "RichText", title: "Advice"),
+//        ComponentMode(type: "Image", title: "Pic"),
+    ]
     
     let takingPicture = UIImagePickerController()
     var picker: UIPickerView = UIPickerView()
@@ -39,6 +43,57 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
     }()
     
     var imageView = UIImageView(image: UIImage(named: "ic_addImg64"))
+
+    required init?(coder: NSCoder) {
+        fatalError("error")
+    }
+    
+    init(feedbackObj: FeedbackModel) {
+        self.feedBackMode = feedbackObj
+        super.init(nibName: nil, bundle: nil)
+        for child in feedBackMode.Child {
+            print("child.type \(String(describing: child.type))")
+            print("child.type \(String(describing: child.title))")
+            switch child.type {
+                case "0":
+                    let labelComponent = ComponentMode(type: "Label", title: child.title ?? "Label", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                    dataSource.append(labelComponent)
+                break
+                case "1":
+                    let textboxComponent = ComponentMode(type: "Textbox", title: child.title ?? "Textbox", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                    dataSource.append(textboxComponent)
+                break
+                case "2":
+                    var singleChoiceList:[String] = []
+                    for childModel in child.chioceList {
+                        singleChoiceList.append(childModel.title ?? "")
+                    }
+                    let singleComponent = ComponentMode(type: "Single", title: child.title ?? "SingleChoice", dropDownList: nil, singleChoiceList: singleChoiceList, multipleChoiceList: nil)
+                    dataSource.append(singleComponent)
+                break
+                case "3":
+                    var multiChoiceList:[String] = []
+                    for childModel in child.chioceList {
+                        if (childModel.title == nil ||  childModel.title!.count > 0) {
+                            multiChoiceList.append(childModel.title ?? "")
+                        }
+                    }
+                    let multiComponent = ComponentMode(type: "Multi", title: child.title ?? "Multi", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: multiChoiceList)
+                    dataSource.append(multiComponent)
+                break
+                case "4":
+                    let richTextComponent = ComponentMode(type: "RichText", title: child.title ?? "RichText", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                    dataSource.append(richTextComponent)
+                break
+                case "5":
+                    let imageComponent = ComponentMode(type: "Image", title: child.title ?? "Image", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                    dataSource.append(imageComponent)
+                break
+                default :
+                break
+            }
+        }
+    }
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -108,7 +163,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         switch dataOriginal.type {
             case "Label":
             let labelComponent = LabelTableView()
-            labelComponent.title = "Title"
+            labelComponent.title = dataOriginal.title
             cell.contentView.addSubview(labelComponent)
             labelComponent.snp.makeConstraints { make in
                 make.height.equalTo(100)
@@ -117,7 +172,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
             
             case "Textbox":
             let textBox = TextBoxTableView()
-            textBox.title = "Description"
+            textBox.title = dataOriginal.title
             cell.contentView.addSubview(textBox)
             textBox.snp.makeConstraints { make in
                 make.height.equalTo(100)
@@ -125,7 +180,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
             }
             case "DropDown":
             let dropDown = DropDownTableView()
-            dropDown.title = "Projects"
+            dropDown.title = dataOriginal.title
             self.selectedShowLabel = dropDown.selectedShowLabel
             dropDown.clickShowPickButton = { () in
                 self.showPickerView()
@@ -200,11 +255,13 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return (dataSource[2].dropDownList ?? []).count
+//        return (dataSource[2].dropDownList ?? []).count
+        return 1
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return (dataSource[2].dropDownList ?? [])[row]
+//        return (dataSource[2].dropDownList ?? [])[row]
+        return "test"
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -296,13 +353,13 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
    
    @objc func showPickerView() {
        showPicker = true
-       UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
-           self.containerView.frame.origin = CGPoint(x:0, y:0)
-       } completion: { isFinish in
-           if isFinish {
-               print("show animation is finish")
-           }
-       }
+//       UIView.animate(withDuration: 0.3, delay: 0, options: .curveLinear) {
+//           self.containerView.frame.origin = CGPoint(x:0, y:0)
+//       } completion: { isFinish in
+//           if isFinish {
+//               print("show animation is finish")
+//           }
+//       }
    }
    
    

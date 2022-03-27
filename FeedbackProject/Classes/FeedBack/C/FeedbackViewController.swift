@@ -52,6 +52,12 @@ class FeedbackViewController: BaseViewController {
                 let editVC = EditFromViewController ()
                 editVC.hidesBottomBarWhenPushed = true
                 editVC.Complete = {() in
+                    let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
+                    var dataArray: [FeedbackModel] = []
+                    for model in data.reversed() {
+                        dataArray.append(model)
+                    }
+                    self?.dataArr = dataArray
                     self?.tableView.reloadData()
                 }
                
@@ -178,8 +184,8 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        let formDetailVC = FormDetailVC()
+        let selectedData = dataArr[indexPath.row]
+        let formDetailVC = FormDetailVC(feedbackObj: selectedData!)
         formDetailVC.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(formDetailVC, animated: true)
     }

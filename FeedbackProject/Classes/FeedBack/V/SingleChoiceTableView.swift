@@ -36,8 +36,9 @@ class SingleChoiceTableView: UIView {
     
     func addSubviews() {
         self.addSubviews([titleLabel])
+        
         self.snp.makeConstraints { make in
-            make.height.equalTo(100)
+            make.height.equalTo(90 * (dataSource?.count ?? 2) / 2)
         }
         
         titleLabel.snp.makeConstraints { make in
@@ -48,35 +49,39 @@ class SingleChoiceTableView: UIView {
         
         var i = 0
         for data in dataSource ?? [] {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.text = data
-            
-            let selectedButton = UIButton(type: .custom)
-            self.addSubviews([label, selectedButton])
-            
-           
-            let topConstraint = (i / 2) * 70 + 35 - 10
-            
-            let leadingOffSet = (i % 2) * 120 + 10
-            label.snp.makeConstraints { make in
-                make.top.equalTo(self).offset(topConstraint)
-                make.leading.equalTo(titleLabel.snp.trailing).offset(leadingOffSet)
-                make.width.equalTo(60)
+            if (data.count > 0) {
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.text = data
+                
+                let selectedButton = UIButton(type: .custom)
+                self.addSubviews([label, selectedButton])
+                
+               
+                let topConstraint = (i / 2) * 70 + 35 - 10
+                
+                let leadingOffSet = (i % 2) * 120 + 10
+                label.snp.makeConstraints { make in
+                    make.top.equalTo(self).offset(topConstraint)
+                    make.leading.equalTo(titleLabel.snp.trailing).offset(leadingOffSet)
+                    make.width.equalTo(60)
+                }
+                
+                selectedButton.snp.makeConstraints { make in
+                    make.leading.equalTo(label.snp.trailing).offset(10)
+                    make.centerY.equalTo(label)
+                    make.width.height.equalTo(20)
+                }
+                
+//                selectedButton.layer.cornerRadius = 10
+//                selectedButton.layer.borderWidth = 2
+//                selectedButton.layer.borderColor = UIColor.red.cgColor
+                selectedButton.addTarget(self, action: #selector(toggleTheBackground), for: .touchUpInside)
+                selectedButton.tag = 10000+i
+                selectedButton.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
+
+                i += 1
             }
-            
-            selectedButton.snp.makeConstraints { make in
-                make.leading.equalTo(label.snp.trailing).offset(10)
-                make.centerY.equalTo(label)
-                make.width.height.equalTo(20)
-            }
-            
-            selectedButton.layer.cornerRadius = 10
-            selectedButton.layer.borderWidth = 2
-            selectedButton.layer.borderColor = UIColor.red.cgColor
-            selectedButton.addTarget(self, action: #selector(toggleTheBackground), for: .touchUpInside)
-            selectedButton.tag = 10000+i
-            i += 1
         }
     }
     
@@ -88,9 +93,12 @@ class SingleChoiceTableView: UIView {
         let currentTag = sender.tag
         for tag in 10000...targetTag {
             self.viewWithTag(tag)
+            let currentButton = self.viewWithTag(tag) as? UIButton
             if (currentTag != tag) {
-                let currentView = self.viewWithTag(tag)
-                currentView?.backgroundColor = UIColor.white
+                currentButton?.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
+//                currentView?.backgroundColor = UIColor.white
+            } else {
+                currentButton?.setImage(UIImage(named: "feedback_form_ic_checkbox_selected"), for: .normal)
             }
         }
     }

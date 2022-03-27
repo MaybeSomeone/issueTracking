@@ -31,14 +31,12 @@ class MultipleChoiceTableView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.translatesAutoresizingMaskIntoConstraints = false
-        
     }
     
     func addSubviews() {
         self.addSubviews([titleLabel])
         self.snp.makeConstraints { make in
-            make.height.equalTo(100)
-        }
+            make.height.equalTo(70 * (dataSource?.count ?? 2) / 2)        }
         
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(self)
@@ -48,45 +46,51 @@ class MultipleChoiceTableView: UIView {
         
         var i = 0
         for data in dataSource ?? [] {
-            let label = UILabel()
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.text = data
-            
-            let selectedButton = UIButton(type: .custom)
-            self.addSubviews([label, selectedButton])
-            
-           
-            let topConstraint = (i / 2) * 70 + 35 - 10
-            
-            let leadingOffSet = (i % 2) * 120 + 10
-            label.snp.makeConstraints { make in
-                make.top.equalTo(self).offset(topConstraint)
-                make.leading.equalTo(titleLabel.snp.trailing).offset(leadingOffSet)
-                make.width.equalTo(60)
+            if (data.count > 0) {
+                print("\(i)")
+
+                let label = UILabel()
+                label.translatesAutoresizingMaskIntoConstraints = false
+                label.text = data
+                
+                let selectedButton = UIButton(type: .custom)
+                self.addSubviews([label, selectedButton])
+
+                let topConstraint = (i / 2) * 70 + 35 - 10
+                
+                let leadingOffSet = (i % 2) * 120 + 10
+                label.snp.makeConstraints { make in
+                    make.top.equalTo(self).offset(topConstraint)
+                    make.leading.equalTo(titleLabel.snp.trailing).offset(leadingOffSet)
+                    make.width.equalTo(60)
+                }
+                
+                selectedButton.snp.makeConstraints { make in
+                    make.leading.equalTo(label.snp.trailing).offset(10)
+                    make.centerY.equalTo(label)
+                    make.width.height.equalTo(20)
+                }
+                
+//                selectedButton.layer.cornerRadius = 10
+//                selectedButton.layer.borderWidth = 2
+//                selectedButton.layer.borderColor = UIColor.red.cgColor
+                selectedButton.addTarget(self, action: #selector(toggleTheBackground), for: .touchUpInside)
+                selectedButton.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
+                selectedButton.tag = 0
+                i += 1
             }
-            
-            selectedButton.snp.makeConstraints { make in
-                make.leading.equalTo(label.snp.trailing).offset(10)
-                make.centerY.equalTo(label)
-                make.width.height.equalTo(20)
-            }
-            
-            selectedButton.layer.cornerRadius = 10
-            selectedButton.layer.borderWidth = 2
-            selectedButton.layer.borderColor = UIColor.red.cgColor
-            selectedButton.addTarget(self, action: #selector(toggleTheBackground), for: .touchUpInside)
-            selectedButton.tag = 10000+i
-            i += 1
         }
     }
     
     
     @objc func toggleTheBackground(sender: UIButton) {
         print(sender.tag);
-        if (sender.backgroundColor?.hexString == "#FF0000") {
-            sender.backgroundColor = UIColor.white
+        if (sender.tag == 0) {
+            sender.setImage(UIImage(named: "feedback_form_ic_checkbox_selected"), for: .normal)
+            sender.tag = 1
         } else {
-            sender.backgroundColor = UIColor.red
+            sender.tag = 0
+            sender.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
         }
     }
     

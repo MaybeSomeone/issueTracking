@@ -14,6 +14,8 @@ class FeedbackViewController: BaseViewController {
         let dataArr: [FeedbackModel?] = []
         return dataArr
     }()
+    private var isCopy = Bool()
+
     ///tabbleview
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -65,23 +67,13 @@ class FeedbackViewController: BaseViewController {
                 break
 
             case 1 ://Copy Existing Form
+                self?.isCopy = true
                 break
             case 2 ://Create by Template
                 
                 let names = ["Event","Raffle","Business","Project","Other","Event","Raffle","Business","Project","Other"]
                 let templateView = CreateByTemplateView()
-//                //添加假数据 添加数据库
-//                for i in 0...names.count - 1 {
-//                    let  model = CreateByTemplateModel()
-//                    model.ID = "\(i + 1)"
-//                    model.title = names[i]
-//                    model.descriptio = "This is a requirement"
-//                    model.createDate = Calendar.current.startOfDay(for: Date())
-//                    templateView.dataArr.append(model)
-//                    //添加到本地数据库 后期可换成接口
-//                    RealmManagerTool.shareManager().addObject(object: model, .template)
-//                }
-                let data = RealmManagerTool.shareManager().queryObjects(objectClass: CreateByTemplateModel.self, .template)
+                let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .template)
                 for model in data.reversed() {
                     templateView.dataArr.append(model)
                 }
@@ -122,27 +114,18 @@ class FeedbackViewController: BaseViewController {
         
         configureNavigationItem()
         
-        
-        let titles = ["Event Feedback","Raffle Feedback","Business Feedback","Project Feedback","Other Feedback"]
-        //添加假数据 添加数据库
-//        for i in 0...titles.count - 1  {
-//            let  model = FeedbackModel()
-//            model.ID = "\(i + 1)"
-//            model.title = titles[i]
-//            model.status = "1"
-//            model.author = "Currie"
-//            model.createDate = Calendar.current.startOfDay(for: Date())
-//            model.descriptio = "feedback description"
-//            dataArr.append(model)
-//            //添加到本地数据库 后期可换成接口
-//            RealmManagerTool.shareManager().addObject(object: model, .feedback)
-//        }
         let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
         for model in data.reversed() {
             dataArr.append(model)
         }
         tableView.reloadData()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        isCopy = false
+    }
+
     
     func configureNavigationItem() {
         let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 22))
@@ -184,10 +167,29 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let selectedData = dataArr[indexPath.row]
-        let formDetailVC = FormDetailVC(feedbackObj: selectedData!)
-        formDetailVC.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(formDetailVC, animated: true)
+        if isCopy == true{
+            let selectedData = dataArr[indexPath.row]
+            let editForm = EditFromViewController()
+            editForm.hidesBottomBarWhenPushed = true
+            editForm.model = selectedData ?? FeedbackModel()
+            editForm.Complete = {() in
+                let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
+                var dataArray: [FeedbackModel] = []
+                for model in data.reversed() {
+                    dataArray.append(model)
+                }
+                self.dataArr = dataArray
+                self.tableView.reloadData()
+            }
+            self.navigationController?.pushViewController(editForm, animated: true)
+
+        }
+        else{
+            let selectedData = dataArr[indexPath.row]
+            let formDetailVC = FormDetailVC(feedbackObj: selectedData!)
+            formDetailVC.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(formDetailVC, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -206,7 +208,7 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
             newModel.richtext = model.richtext
             newModel.author = model.author
             newModel.ID = "000\(model.ID ?? "000")\(indexPath.row)"
-            
+            newModel.Child = model.Child
             RealmManagerTool.shareManager().addObject(object: newModel, .feedback)
             
             self.dataArr.append(newModel)

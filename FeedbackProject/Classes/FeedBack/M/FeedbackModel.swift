@@ -8,8 +8,26 @@
 import Foundation
 import RealmSwift
 
-class FeedbackModel: Object {
+class FeedbackModel: Object ,NSCopying{
   
+    func copy(with zone: NSZone? = nil) -> Any {
+        let theCopyObj = type(of: self).init()
+        theCopyObj.ID = self.ID
+        theCopyObj.title = self.title
+        theCopyObj.descriptio = self.descriptio
+        theCopyObj.status = self.status
+        theCopyObj.createDate = self.createDate
+        theCopyObj.author = self.author
+        theCopyObj.richtext = self.richtext
+        theCopyObj.Child = self.Child
+        return theCopyObj
+
+    }
+    
+    required override init() {
+
+    }
+
     @objc dynamic var ID: String? //ID
     
     @objc dynamic var title: String? //标题

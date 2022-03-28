@@ -11,13 +11,12 @@ import Photos
 
 class EditFromViewController: BaseViewController,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate & UINavigationControllerDelegate{
 
-    var dataModel = FeedbackModel()
+    private var dataModel = FeedbackModel()
     private var editDataModel = FeedbackModel()
-    private var templateModel = CreateByTemplateModel()
+    private var templateModel = FeedbackModel()
     private var takingPicture = UIImagePickerController()
     private var IsSaveTemplate = Bool()
     var Complete : () -> Void = {}
-
     private lazy var setFormView : SetFormView = {
         
         let setFormView = SetFormView()
@@ -64,10 +63,21 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         creatdata()
         setupUI()
         
+        print(dataModel)
+        
     }
     
     @objc func tapAddButton() {
         
+    }
+    
+    var model: FeedbackModel? {
+        didSet {
+            for curmodel :FromChildTypeModel in model!.Child {
+                self.dataModel.Child.append(curmodel.copy() as! FromChildTypeModel)
+            }
+            self.table.reloadData()
+        }
     }
     
     func configureAddNewIssueButton() {
@@ -142,6 +152,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
                 else{
                     self.savedataModel()
                     RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
+                    
                     self.Complete()
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -491,6 +502,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     }
     func reloadtable(){
         self.dataModel.Child.removeAll()
+        self.templateModel.Child.removeAll()
         for curmodel in self.editDataModel.Child  where curmodel.isSelet==true{
             self.dataModel.Child.append(curmodel)
             self.templateModel.Child.append(curmodel.copy() as! FromChildTypeModel)

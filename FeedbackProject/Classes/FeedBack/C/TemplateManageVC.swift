@@ -54,8 +54,8 @@ class TemplateManageVC: BaseViewController, UITableViewDelegate, UITableViewData
             make.edges.equalTo(self.view)
         }
         
-        let data = RealmManagerTool.shareManager().queryObjects(objectClass: CreateByTemplateModel.self, filter: nil, .template)
-        print("template mode = \(data)")
+//        let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, filter: nil, .template)
+//        print("template mode = \(data)")
     }
     
     // MARK: - UITableView Delegate
@@ -82,7 +82,7 @@ class TemplateManageVC: BaseViewController, UITableViewDelegate, UITableViewData
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
+        let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .template)
         var cacheList: Array<TemplateMode> = []
         if data.count > 0 {
             for model in data {
@@ -117,7 +117,7 @@ class TemplateManageVC: BaseViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let feedback = feedBackModel[indexPath.row]
         let editForm = EditFromViewController()
-        editForm.dataModel = feedback
+        editForm.model = feedback
         self.navigationController?.pushViewController(editForm, animated: true)
     }
 }

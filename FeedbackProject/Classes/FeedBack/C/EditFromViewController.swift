@@ -11,7 +11,7 @@ import Photos
 
 class EditFromViewController: BaseViewController,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate & UINavigationControllerDelegate{
 
-    private var dataModel = FeedbackModel()
+    var dataModel = FeedbackModel()
     private var editDataModel = FeedbackModel()
     private var templateModel = CreateByTemplateModel()
     private var takingPicture = UIImagePickerController()

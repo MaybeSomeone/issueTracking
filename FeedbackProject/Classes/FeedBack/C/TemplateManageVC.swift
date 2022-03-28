@@ -113,4 +113,11 @@ class TemplateManageVC: BaseViewController, UITableViewDelegate, UITableViewData
           tableView.deleteRows(at: [indexPath], with: .automatic)
       }
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let feedback = feedBackModel[indexPath.row]
+        let editForm = EditFromViewController()
+        editForm.dataModel = feedback
+        self.navigationController?.pushViewController(editForm, animated: true)
+    }
 }

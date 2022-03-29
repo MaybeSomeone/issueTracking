@@ -15,10 +15,12 @@ class FeedbackViewController: BaseViewController {
         return dataArr
     }()
     private var isCopy = Bool()
-
     
-    
-    
+   ///测试代码提交远程
+    private var testArr: [FeedbackModel?] = {
+        let dataArr: [FeedbackModel?] = []
+        return dataArr
+    }()
     ///tabbleview
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -151,6 +153,7 @@ class FeedbackViewController: BaseViewController {
     }
     
 }
+
 
 // MARK: -  UITableViewDataSource, UITableViewDelegate
 extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {

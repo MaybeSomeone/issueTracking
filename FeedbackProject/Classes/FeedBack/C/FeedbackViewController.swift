@@ -15,12 +15,7 @@ class FeedbackViewController: BaseViewController {
         return dataArr
     }()
     private var isCopy = Bool()
-    
-   ///测试代码提交远程
-    private var testArr: [FeedbackModel?] = {
-        let dataArr: [FeedbackModel?] = []
-        return dataArr
-    }()
+
     ///tabbleview
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -69,11 +64,9 @@ class FeedbackViewController: BaseViewController {
                 }
                
                 self?.navigationController?.pushViewController(editVC, animated: true)
-                break
 
             case 1 ://Copy Existing Form
                 self?.isCopy = true
-                break
             case 2 ://Create by Template
                 
                 let names = ["Event","Raffle","Business","Project","Other","Event","Raffle","Business","Project","Other"]
@@ -153,7 +146,12 @@ class FeedbackViewController: BaseViewController {
     }
     
 }
-
+///测试代码提交远程  ///测试代码提交远程
+///  ///测试代码提交远程
+///    ///测试代码提交远程
+///      ///测试代码提交远程
+///        ///测试代码提交远程
+///          ///测试代码提交远程  ///测试代码提交远程
 
 // MARK: -  UITableViewDataSource, UITableViewDelegate
 extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {

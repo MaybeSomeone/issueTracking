@@ -27,6 +27,9 @@ class LoginViewController: BaseViewController {
         return usernameField
     }()
     
+    
+    
+    
     private lazy var passwordField: UITextField = {
         let passwordField = UITextField()
 //        usernameField.leftView = nil
@@ -56,6 +59,8 @@ class LoginViewController: BaseViewController {
         return btn
     }()
     
+    
+    
     private lazy var registerBtn: UIButton = {
         let btn = UIButton()
         btn.backgroundColor = .mainColor
@@ -68,6 +73,7 @@ class LoginViewController: BaseViewController {
         btn.backgroundColor = .blue
         return btn
     }()
+    
     
     private lazy var forgetBtn: UIButton = {
         let btn = UIButton()

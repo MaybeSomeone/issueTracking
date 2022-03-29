@@ -108,7 +108,7 @@ class TemplateManageVC: BaseViewController, UITableViewDelegate, UITableViewData
       if editingStyle == .delete {
           print("Deleted")
           let feedBackModelRow = self.feedBackModel.remove(at: indexPath.row)
-          RealmManagerTool.shareManager().deleteObject(object: feedBackModelRow, .feedback)
+          RealmManagerTool.shareManager().deleteObject(object: feedBackModelRow, .template)
           templateModeList.remove(at: indexPath.row)
           tableView.deleteRows(at: [indexPath], with: .automatic)
       }

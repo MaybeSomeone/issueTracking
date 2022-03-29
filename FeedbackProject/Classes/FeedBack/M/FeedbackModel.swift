@@ -19,6 +19,7 @@ class FeedbackModel: Object ,NSCopying{
         theCopyObj.createDate = self.createDate
         theCopyObj.author = self.author
         theCopyObj.richtext = self.richtext
+
         theCopyObj.Child = self.Child
         return theCopyObj
 
@@ -48,7 +49,7 @@ class FeedbackModel: Object ,NSCopying{
         return "ID"
     }
     
-     dynamic var Child = List<FromChildTypeModel>()
+      var Child = List<FromChildTypeModel>()
 
 }
 
@@ -65,9 +66,12 @@ class FromChildTypeModel: Object ,NSCopying {
         theCopyObj.editStatu = self.editStatu
         theCopyObj.isSelet = self.isSelet
         theCopyObj.height = self.height
-        theCopyObj.chioceList = self.chioceList
-        theCopyObj.ImageList = self.ImageList
-
+        for model in self.chioceList{
+            theCopyObj.chioceList.append(model.copy() as! ChioceModel)
+        }
+        for model in self.ImageList{
+            theCopyObj.ImageList.append(model.copy() as! ImageChioceModel)
+        }
         return theCopyObj
     }
     

@@ -193,6 +193,12 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         //            snapShotImage.image = UIImage(data: Data(contentsOf: URL(fileURLWithPath: requestMode.snapImage)))
         reproTextView.text = requestMode.reproStep
         commentsTextView.text = requestMode.comments
+        let imageUrl = NSHomeDirectory() + "/Documents/\(requestMode.issueId).png"
+        let getImg = UIImage(contentsOfFile: imageUrl)
+        if (getImg != nil) {
+            snapShotImage.image = getImg
+        }
+        
     }
 
     // MARK:  -  Lifecycle method
@@ -704,7 +710,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         if (commentsTextView.text.count == 0) {
             return CustomProgressHud.showError(withStatus: "comments cannot be empty!")
         }
-
+        let loginModel = RealmManagerTool.shareManager().queryObjects(objectClass: LoginModel.self, .login).first
         
         let model = IssueModel()
         model.ID = requestMode.issueId
@@ -718,9 +724,8 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         model.repro = reproTextView.text
         model.descriptio = desTextView.text
         model.createDate = Date()
-        model.author = "Administrater"
-        
-//        model.snpImage = requestMode.snapImage
+        model.author = loginModel?.username
+        model.snpImage = requestMode.snapImage
         
         if (isAddNewRecord) {
             RealmManagerTool.shareManager().addObject(object: model, .issue)
@@ -936,15 +941,21 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
     
     // MARK: - Image Picker Delegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-//            //原图
-        print("test")
-        let imageUrl = info[UIImagePickerController.InfoKey.imageURL] as! NSURL
-        let imageUrlString = imageUrl.absoluteString
-        requestMode.snapImage = imageUrlString ?? ""
-        
+        //原图
+        print("selected image finish")
         snapShotImage.image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        
+        let path = NSHomeDirectory() + "/Documents/\(requestMode.issueId).png"
+        requestMode.snapImage = path
+        do {
+            try snapShotImage.image?.pngData()?.write(to: URL(fileURLWithPath: path))
+        }catch {
+                    
+        }
         takingPicture.dismiss(animated: true, completion: nil)
     }
+    
+    
     
     // MARK: - ScrrollView delegate
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {

@@ -113,10 +113,30 @@ class FeedbackViewController: BaseViewController {
         configureNavigationItem()
         
         let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
-        for model in data.reversed() {
-            dataArr.append(model)
+        if data.count > 0 {
+            for model in data.reversed() {
+                dataArr.append(model)
+            }
+            tableView.reloadData()
+        }else{
+            let titles = ["Event Feedback","Raffle Feedback","Business Feedback","Project Feedback","Other Feedback"]
+//            添加假数据 添加数据库
+            for i in 0...titles.count - 1  {
+                let  model = FeedbackModel()
+                model.ID = "\(i + 1)"
+                model.title = titles[i]
+                model.status = "1"
+                model.author = "Currie"
+                model.createDate = Calendar.current.startOfDay(for: Date())
+                model.descriptio = "feedback description"
+                dataArr.append(model)
+                //添加到本地数据库 后期可换成接口
+                RealmManagerTool.shareManager().addObject(object: model, .feedback)
+            }
+            
+            tableView.reloadData()
         }
-        tableView.reloadData()
+       
     }
     
     override func viewWillAppear(_ animated: Bool) {

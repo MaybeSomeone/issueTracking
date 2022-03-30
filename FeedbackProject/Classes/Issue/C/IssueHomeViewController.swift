@@ -100,6 +100,6 @@ extension IssueHomeViewController {
     }
     
     override func pageController(_ pageController: WMPageController, preferredFrameForContentView contentView: WMScrollView) -> CGRect {
-        return CGRect(x: 0, y: 0, width: CGFloat.screenWidth, height: CGFloat.screenHeight)
+        return CGRect(x: 0, y: 0, width: CGFloat.screenWidth, height: CGFloat.screenHeight - CGFloat.naviHeight() - CGFloat.bottomHeight() - 44)
     }
 }

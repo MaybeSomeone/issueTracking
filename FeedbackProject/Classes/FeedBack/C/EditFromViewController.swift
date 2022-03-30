@@ -17,6 +17,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     private var takingPicture = UIImagePickerController()
     private var IsSaveTemplate = Bool()
     var Complete : () -> Void = {}
+    
     private lazy var setFormView : SetFormView = {
         
         let setFormView = SetFormView()
@@ -62,9 +63,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         configureAddNewIssueButton()
         creatdata()
         setupUI()
-        
-        print(dataModel)
-        
+                
     }
     
     @objc func tapAddButton() {
@@ -114,78 +113,45 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
 
         alertView.confirmBlock = {String in
             self.hideshadeView()
-            self.savedataModel()
             self.templateModel.title = String
             self.templateModel.ID = "100\(arc4random_uniform(100) + 1)"
-            RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
             RealmManagerTool.shareManager().addObject(object: self.templateModel, .template)
-            self.Complete()
-            self.navigationController?.popViewController(animated: true)
+            self.savedataModel()
 
 
         }
+        ///点击publish
         editFormFootView.publishBtnBlock = {() in
-            if self.dataModel.Child.count > 0{
-                self.dataModel.status = "3"
-                if self.IsSaveTemplate == true{
-                    self.alertView.isHidden = false
-                    
-                }
-                else{
-                    self.savedataModel()
-                    RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
-                    self.Complete()
-                    self.navigationController?.popViewController(animated: true)
-                }
-            }
-            else{
-                CustomProgressHud.showError(withStatus: "Option cannot be empty!")
-
-            }
+            self.saveFormModel(status: "3")
         }
+        ///点击save
         editFormFootView.saveBtnBlock = {() in
-            if self.dataModel.Child.count > 0{
-                self.dataModel.status = "2"
-                if self.IsSaveTemplate == true{
-                    self.alertView.isHidden = false
-                }
-                else{
-                    self.savedataModel()
-                    RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
-                    
-                    self.Complete()
-                    self.navigationController?.popViewController(animated: true)
-                }
-            }
-            else{
-                CustomProgressHud.showError(withStatus: "Option cannot be empty!")
-
-            }
-           
-          
-
+            self.saveFormModel(status: "2")
         }
+        ///点击testing
         editFormFootView.testingBtnBlock = {() in
-            if self.dataModel.Child.count > 0{
-                self.dataModel.status = "1"
-                if self.IsSaveTemplate == true{
-                    self.alertView.isHidden = false
-                }
-                else{
-                    self.savedataModel()
-                    RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
-                    self.Complete()
-                    self.navigationController?.popViewController(animated: true)
-                }
-            }
-            else{
-                CustomProgressHud.showError(withStatus: "Option cannot be empty!")
-
-            }
+            self.saveFormModel(status: "1")
         }
 
     }
+    ///feekModel存入数据库
+    func saveFormModel(status : String){
+        if self.dataModel.Child.count > 0{
+            self.dataModel.status = status
+            if self.IsSaveTemplate == true{
+                self.alertView.isHidden = false
+            }
+            else{
+                self.savedataModel()
+            }
+        }
+        else{
+            CustomProgressHud.showError(withStatus: "Option cannot be empty!")
+
+        }
+    }
     
+    ///组合feekModel
     func savedataModel(){
         let loginModel = RealmManagerTool.shareManager().queryObjects(objectClass: LoginModel.self, .login).first
         self.dataModel.author = loginModel?.username
@@ -193,13 +159,25 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         self.dataModel.ID = "100\(arc4random_uniform(100) + 1)"
         self.dataModel.title = self.dataModel.Child[0].title
         self.dataModel.descriptio = self.dataModel.Child[1].title
+        RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
+        self.Complete()
+        self.navigationController?.popViewController(animated: true)
+
     }
+    
+    ///创建编辑菜单数据源
     func creatdata(){
         for i in 0 ..< 6{
         editDataModel.Child.append(self.creatModel(i: i))
         }
+        if model != nil {
+            for curmodel :FromChildTypeModel in model!.Child {
+                let model = curmodel.copy() as! FromChildTypeModel
+                self.editDataModel.Child[Int(model.type ?? "") ?? 0] = model
+            }
+        }
+
     }
-    
     func creatModel( i : Int) -> FromChildTypeModel{
         let model = FromChildTypeModel()
         switch i {
@@ -495,11 +473,12 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         }
 
     
+    //删除Cell后更新编辑页面
     func update(model:FromChildTypeModel){
-
         editDataModel.Child[Int(model.type ?? "") ?? 0] = self.creatModel( i : Int(model.type ?? "") ?? 0 )
-
     }
+    
+    //刷新templateModel和dataModel状态
     func reloadtable(){
         self.dataModel.Child.removeAll()
         self.templateModel.Child.removeAll()
@@ -508,20 +487,19 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             self.templateModel.Child.append(curmodel.copy() as! FromChildTypeModel)
         }
         self.setFormView.setFromTabelView.reloadData()
-
     }
+    
+    //隐藏编辑页面
     func hideshadeView(){
         self.alertView.isHidden = true
         UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .transitionCurlDown, animations: {
             _ = UIApplication.shared.delegate as!AppDelegate
             self.setFormView.frame = CGRect(x: 0, y: CGFloat.screenHeight, width: CGFloat.screenWidth, height: CGFloat.screenHeight)
         }, completion: nil)
-        reloadtable()
-//            self.dataModel = self.SaveEditdataModel
-        
+        reloadtable()        
         self.table.reloadData()
     }
-    
+    //显示编辑页面
     func showshadeView(){
         UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.8, options: .transitionCurlDown, animations: {
             let delegate = UIApplication.shared.delegate as!AppDelegate

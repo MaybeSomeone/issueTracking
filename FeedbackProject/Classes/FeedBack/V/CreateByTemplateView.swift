@@ -9,7 +9,7 @@ import UIKit
 
 class CreateByTemplateView: UIView {
     
-    var createByTemplateViewComplete: ((FeedbackModel)->Void)?
+    var createByTemplateViewComplete: ((CreateByTemplateModel)->Void)?
     
     /// 背景
     lazy var bgView: UIView = {
@@ -37,8 +37,8 @@ class CreateByTemplateView: UIView {
     }()
     
     ///数据源
-     var dataArr: [FeedbackModel?] = {
-        let dataArr: [FeedbackModel?] = []
+     var dataArr: [CreateByTemplateModel?] = {
+        let dataArr: [CreateByTemplateModel?] = []
         return dataArr
     }()
     

@@ -9,7 +9,7 @@ import UIKit
 
 class CreateByTemplateViewCell: UITableViewCell {
 
-    var model: FeedbackModel? {
+    var model: CreateByTemplateModel? {
         didSet {
             if (model != nil) {
                 titleLabel.text = model?.title

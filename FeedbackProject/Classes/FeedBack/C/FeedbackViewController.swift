@@ -15,7 +15,7 @@ class FeedbackViewController: BaseViewController {
         return dataArr
     }()
     private var isCopy = Bool()
-
+    
     ///tabbleview
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -62,18 +62,34 @@ class FeedbackViewController: BaseViewController {
                     self?.dataArr = dataArray
                     self?.tableView.reloadData()
                 }
-               
+                
                 self?.navigationController?.pushViewController(editVC, animated: true)
-
+                
             case 1 ://Copy Existing Form
                 self?.isCopy = true
             case 2 ://Create by Template
                 
                 let names = ["Event","Raffle","Business","Project","Other","Event","Raffle","Business","Project","Other"]
                 let templateView = CreateByTemplateView()
-                let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .template)
-                for model in data.reversed() {
-                    templateView.dataArr.append(model)
+                let data = RealmManagerTool.shareManager().queryObjects(objectClass: CreateByTemplateModel.self, .template)
+                
+                
+                if data.count > 0 {
+                    for model in data.reversed() {
+                        templateView.dataArr.append(model)
+                    }
+                }else{
+                    //添加假数据 添加数据库
+                    for i in 0...names.count - 1 {
+                        let  model = CreateByTemplateModel()
+                        model.ID = "\(i + 1)"
+                        model.title = names[i]
+                        model.descriptio = "This is a requirement"
+                        model.createDate = Calendar.current.startOfDay(for: Date())
+                        templateView.dataArr.append(model)
+                        //添加到本地数据库 后期可换成接口
+                        RealmManagerTool.shareManager().addObject(object: model, .template)
+                    }
                 }
                 
                 templateView.createByTemplateViewComplete = { [weak self] templateModel in
@@ -85,7 +101,6 @@ class FeedbackViewController: BaseViewController {
                     templateManageVC.hidesBottomBarWhenPushed = true
                     weakself.navigationController?.pushViewController(templateManageVC, animated: true)
                     
-                   
                 }
                 templateView.show()
                 templateView.tableView.reloadData()
@@ -120,7 +135,7 @@ class FeedbackViewController: BaseViewController {
             tableView.reloadData()
         }else{
             let titles = ["Event Feedback","Raffle Feedback","Business Feedback","Project Feedback","Other Feedback"]
-//            添加假数据 添加数据库
+            //            添加假数据 添加数据库
             for i in 0...titles.count - 1  {
                 let  model = FeedbackModel()
                 model.ID = "\(i + 1)"
@@ -136,14 +151,14 @@ class FeedbackViewController: BaseViewController {
             
             tableView.reloadData()
         }
-       
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         isCopy = false
     }
-
+    
     
     func configureNavigationItem() {
         let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 22))
@@ -201,7 +216,7 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
                 self.tableView.reloadData()
             }
             self.navigationController?.pushViewController(editForm, animated: true)
-
+            
         }
         else{
             let selectedData = dataArr[indexPath.row]
@@ -218,7 +233,7 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let copyAction = UIContextualAction(style: .normal, title: "Copy") { [weak self] _, _, complete in
             guard let `self` = self else { return }
-           
+            
             guard let model = self.dataArr[indexPath.row] else { return }
             let newModel = FeedbackModel()
             newModel.title = model.title

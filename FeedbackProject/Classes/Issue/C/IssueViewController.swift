@@ -303,6 +303,7 @@ extension IssueViewController: CustomDropDownMenuDelegate, CustomDropDownMenuDat
         default:
             break
         }
+        let filterString = "category = '\(filterDict["category"] ?? "0")' AND priority = '\(filterDict["priority"] ?? "0")' AND type = '\(filterDict["type"] ?? "0")' AND status = '\(filterDict["status"] ?? "0")'"
         ///NSPredicate 筛选查询匹配
         let data = RealmManagerTool.shareManager().queryObjects(objectClass: IssueModel.self, filter: "category = '\(filterDict["category"] ?? "0")' AND priority = '\(filterDict["priority"] ?? "0")' AND type = '\(filterDict["type"] ?? "0")' AND status = '\(filterDict["status"] ?? "0")'", .issue)
         for model in data.reversed() {

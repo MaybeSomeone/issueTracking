@@ -33,11 +33,11 @@ class FeedbackViewController: BaseViewController {
     private lazy var menuView: MLMenuView = {
         let menuView = MLMenuView(frame: CGRect(x: CGFloat.screenWidth - 234 - 10, y: 0, width: 234, height: 44*4),
                                   withTitles: ["Create Blank Form",
-                                               "Copy Existing Form",
+//                                               "Copy Existing Form",
                                                "Create by Template",
                                                "Template Management"],
                                   withImageNames: ["ic_blankForm",
-                                                   "ic_copyForm",
+//                                                   "ic_copyForm",
                                                    "ic_byTemplate",
                                                    "ic_templateMgmt"],
                                   withMenuViewOffsetTop: CGFloat.naviHeight(),
@@ -65,9 +65,9 @@ class FeedbackViewController: BaseViewController {
                 
                 self?.navigationController?.pushViewController(editVC, animated: true)
                 
-            case 1 ://Copy Existing Form
-                self?.isCopy = true
-            case 2 ://Create by Template
+//            case 1 ://Copy Existing Form
+//                self?.isCopy = true
+            case 1 ://Create by Template
                 
                 let names = ["Event","Raffle","Business","Project","Other","Event","Raffle","Business","Project","Other"]
                 let templateView = CreateByTemplateView()
@@ -104,7 +104,7 @@ class FeedbackViewController: BaseViewController {
                 }
                 templateView.show()
                 templateView.tableView.reloadData()
-            case 3 ://Template Management
+            case 2 ://Template Management
                 
                 let templateManageVC = TemplateManageVC()
                 templateManageVC.hidesBottomBarWhenPushed = true
@@ -220,9 +220,12 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
         }
         else{
             let selectedData = dataArr[indexPath.row]
-            let formDetailVC = FormDetailVC(feedbackObj: selectedData!)
-            formDetailVC.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(formDetailVC, animated: true)
+//            let formDetailVC = FormDetailVC(feedbackObj: selectedData!)
+//            formDetailVC.hidesBottomBarWhenPushed = true
+//            navigationController?.pushViewController(formDetailVC, animated: true)
+            let editVC = EditFromViewController()
+            editVC.model = selectedData
+            navigationController?.pushViewController(editVC, animated: true)
         }
     }
     
@@ -243,7 +246,10 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
             newModel.author = model.author
             newModel.ID = "000\(model.ID ?? "000")\(indexPath.row)"
             newModel.Child = model.Child
-            RealmManagerTool.shareManager().addObject(object: newModel, .feedback)
+            let editForm = EditFromViewController()
+            editForm.model = newModel
+            self.navigationController?.pushViewController(editForm, animated: true)
+//            RealmManagerTool.shareManager().addObject(object: newModel, .feedback)
             
             self.dataArr.append(newModel)
             tableView.reloadData()

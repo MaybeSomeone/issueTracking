@@ -208,7 +208,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         if (isAddNewRecord) {
             navigationItem.title = "Create"
         } else {
-            navigationItem.title = "Detail\\Update"
+            navigationItem.title = "Edit\\Detail"
         }
         
     }
@@ -719,7 +719,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         model.priority = requestMode.priorityIndex
         model.type = requestMode.issueTypeIndex
         model.status = requestMode.statusIndex
-        model.assignee = requestMode.assigneeIndex
+        model.assgin = requestMode.assigneeIndex
         model.comments = commentsTextView.text
         model.repro = reproTextView.text
         model.descriptio = desTextView.text

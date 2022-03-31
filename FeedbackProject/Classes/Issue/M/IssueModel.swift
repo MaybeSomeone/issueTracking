@@ -20,6 +20,12 @@ class IssueModel: Object {
     @objc dynamic var status: String? //all 0 "Open" 1 ,"In Progress" 2 ,"Resolved" 3 ,"Closed" 4
     
     @objc dynamic var createDate : Date? // createDate
+    
+    @objc dynamic var resolveDate : Date? // resolveDate
+    
+    @objc dynamic var closeDate : Date? // closeDate
+    
+    @objc dynamic var latestUpdateDate : Date? // latestUpdateDate
      
     @objc dynamic var author: String? // 发布者
     

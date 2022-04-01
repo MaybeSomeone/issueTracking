@@ -26,7 +26,7 @@ let textfieldFont = UIFont(name: "苹方-简 常规体", size: 34)
 let categoryDataSource = (type: "category", dataSource: ["Finance", "Sales", "Human resource"])
 let priorityDataSource = (type: "priority", dataSource: ["Critical", "High", "Medium", "Low"])
 let issueTypeDataSource = (type: "issueType", dataSource: ["Feature", "Task", "Bug"])
-let statusDataSource = (type: "status", dataSource: ["Open", "Medium", "High", "Critical"])
+let statusDataSource = (type: "status", dataSource: ["open", "resolve", "close"])
 let assigneeDataSource = (type: "assignee", dataSource: ["Low", "Medium", "High", "Critical"])
 
 struct RequestMode {
@@ -60,7 +60,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
                                             priority: issueMode?.priority ?? "",
                                             issueType: issueMode?.type ?? "",
                                             status: issueMode?.status ?? "",
-                                            assignee: issueMode?.assignee ?? "",
+                                            assignee: issueMode?.assgin ?? "",
                                             descript: issueMode?.descriptio ?? "",
                                             snapImage: issueMode?.snpImage ?? "",
                                             comments: issueMode?.comments ?? "",
@@ -208,7 +208,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         if (isAddNewRecord) {
             navigationItem.title = "Create"
         } else {
-            navigationItem.title = "Detail\\Update"
+            navigationItem.title = "Edit\\Detail"
         }
         
     }
@@ -389,7 +389,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         creatButton.titleLabel?.font = (UIFont(name: "苹方-简 常规体", size: 34))
         creatButton.setTitleColor(UIColor(red: 1, green: 1, blue: 1, alpha: 1), for: .normal)
         creatButton.backgroundColor = UIColor(red: 0, green: 0.43, blue: 0.89, alpha: 1)
-        creatButton.addTarget(self, action: #selector(clickCreatButton), for: .touchUpInside)
+        creatButton.addTarget(self, action: #selector(clickCreateButton), for: .touchUpInside)
         creatButton.layer.cornerRadius = 5
         creatButton.snp.makeConstraints { make in
             make.centerX.equalTo(self.view)
@@ -673,7 +673,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         present(takingPicture, animated: true, completion: nil)
     }
     
-    @objc func clickCreatButton() {
+    @objc func clickCreateButton() {
         
         if (requestMode.title.count == 0) {
             return CustomProgressHud.showError(withStatus: "title cannot be empty!")
@@ -719,7 +719,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         model.priority = requestMode.priorityIndex
         model.type = requestMode.issueTypeIndex
         model.status = requestMode.statusIndex
-        model.assignee = requestMode.assigneeIndex
+        model.assgin = requestMode.assigneeIndex
         model.comments = commentsTextView.text
         model.repro = reproTextView.text
         model.descriptio = desTextView.text
@@ -727,15 +727,23 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         model.author = loginModel?.username
         model.snpImage = requestMode.snapImage
         
+        
+        
         if (isAddNewRecord) {
             RealmManagerTool.shareManager().addObject(object: model, .issue)
             addNewIssueComplete?(model)
         } else {
 //            Update the history record
+            switch requestMode.statusIndex {
+                case "1":
+                    model.resolveDate = Date()
+                case "2":
+                    model.closeDate = Date()
+                default:
+                    model.latestUpdateDate = Date()
+            }
             RealmManagerTool.shareManager().updateObject(object: model, .issue)
         }
-        
-        
         self.navigationController?.popViewController(animated: true)
     }
 

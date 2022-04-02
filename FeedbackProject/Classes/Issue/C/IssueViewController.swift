@@ -83,16 +83,20 @@ class IssueViewController: BaseViewController {
             //添加假数据 添加数据库
             for i in 0...4 { //status == 1
                 let  model = IssueModel()
+                let date = Date()
                 model.ID = "\(i + 1)"
                 model.title = "test"
                 model.assgin = "INFO"
                 model.status = "1"
                 model.author = "Currie"
-                model.createDate = Calendar.current.startOfDay(for: Date())
+                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
+                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
+                model.createDate =  Calendar.current.startOfDay(for: Date())
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"
                 model.type = "0"
+                model.assignee = "assignee1"
                 dataArr.append(model)
                 
                 //添加到本地数据库 后期可换成接口
@@ -101,16 +105,20 @@ class IssueViewController: BaseViewController {
             
             for i in 5...10 {//全部
                 let  model = IssueModel()
+                let date = Date()
                 model.ID = "\(i + 1)"
                 model.title = "test"
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.createDate = Calendar.current.startOfDay(for: Date())
+                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
+                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
+                model.createDate =  Calendar.current.startOfDay(for: Date())
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"
                 model.type = "0"
+                model.assignee = "assignee2"
                 dataArr.append(model)
                 
                 //添加到本地数据库 后期可换成接口
@@ -119,16 +127,20 @@ class IssueViewController: BaseViewController {
             
             for i in 11...15 { //type == 1
                 let  model = IssueModel()
+                let date = Date()
                 model.ID = "\(i + 1)"
                 model.title = "test"
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.createDate = Calendar.current.startOfDay(for: Date())
+                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
+                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
+                model.createDate =  Calendar.current.startOfDay(for: Date())
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"
                 model.type = "1"
+                model.assignee = "assignee3"
                 dataArr.append(model)
                 
                 //添加到本地数据库 后期可换成接口
@@ -137,12 +149,15 @@ class IssueViewController: BaseViewController {
             
             for i in 16...20 { //category == 1
                 let  model = IssueModel()
+                let date = Date()
                 model.ID = "\(i + 1)"
                 model.title = "test"
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.createDate = Calendar.current.startOfDay(for: Date())
+                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
+                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
+                model.createDate =  Calendar.current.startOfDay(for: Date())
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"

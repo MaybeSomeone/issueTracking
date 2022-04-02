@@ -52,13 +52,19 @@ class IssueReportPieChartView: UIView {
         }
     }
     
-    func setDataCount(_ count: Int, range: UInt32) {
+    func setDataCount(_ dict : [String:[IssueModel?]] , type : String) {
         
-        let entries = (0..<count).map { (i) -> PieChartDataEntry in
-            return PieChartDataEntry(value: Double(Int(100 -  i*5)),
-                                     label: parties[i % parties.count])
+        if dict.keys.count == 0 {
+            pieChartView.data = nil;
+            return;
         }
         
+
+        let entries = (0..<dict.keys.count).map { (i) -> PieChartDataEntry in
+            print(i)
+            return PieChartDataEntry(value: Double(Array(dict.values)[i].count),
+                                     label:tolabelStr(_type: type, _x_value:  Array(dict.keys)[i]))
+        }        
         let set = PieChartDataSet(entries: entries, label: "")
         set.drawIconsEnabled = false
         set.sliceSpace = 2
@@ -86,6 +92,39 @@ class IssueReportPieChartView: UIView {
         pieChartView.highlightValues(nil)
         
     }
+    
+    func tolabelStr(_type:String , _x_value:String) -> String {if _type == "type"{
+        switch _x_value {
+        case "0":
+            return "all"
+        case "1":
+            return "Feature"
+        case "2":
+            return "Task"
+        case "3":
+            return "Bug"
+        default:
+            break
+        }
+    }
+    else{
+        
+        switch _x_value {
+        case "0":
+            return "all"
+        case "1":
+            return "Finance"
+        case "2":
+            return "Sales"
+        case "3":
+            return "Human Resources"
+        default:
+            break
+        }
+    }
+        return ""
+    }
+
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

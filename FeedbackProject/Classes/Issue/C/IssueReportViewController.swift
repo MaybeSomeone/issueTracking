@@ -236,7 +236,7 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
 
         barChartView.setDataCount(self.assigneeDictionary)
         
-//        linechartView.setDataCount(self.dataArr,self.timeDict)
+        linechartView.setDataCount(self.dataArr,self.timeDict)
     }
     
     ///caregoreBtnClicked
@@ -291,11 +291,17 @@ extension IssueReportViewController: CustomDropDownMenuDelegate, CustomDropDownM
                     
                     let datas = defaultRealm!.objects(IssueModel.self).filter("createDate BETWEEN %@ AND category = '\(dict["category"] ?? "0")' AND priority = '\(dict["priority"] ?? "0")' AND type = '\(dict["type"] ?? "0")' AND status = '\(dict["status"] ?? "0")' AND assignee = '\(dict["assignee"] ?? "None")'",[dict["startDate"], dict["endDate"]])
 
-                    guard datas.count > 0 else { return }
+                    guard datas.count > 0 else {
+                        self!.categaryDictionary = Dictionary(grouping: self!.dataArr, by: { ($0?.category)!})
+                        self!.typeDictionary = Dictionary(grouping: self!.dataArr, by: { ($0?.type)!})
+                        self!.assigneeDictionary = Dictionary(grouping: self!.dataArr, by: { ($0?.assignee)!})
+                        self!.updateChartData()
+                        return
+                    }
                     
                     for model in datas.reversed() {
                         
-                        
+    
                         _ = self!.dataArr.reduce([String:[IssueModel]]()) { (res, box) -> [String:[IssueModel]] in
                             var res = res
                             res[(box?.category)!] = (res[box!.category!] ?? [])

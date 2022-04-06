@@ -80,6 +80,9 @@ class IssueViewController: BaseViewController {
             }
             tableView.reloadData()
         }else{
+            
+//            model.createDate =  Calendar.current.startOfDay(for: Date())
+
             //添加假数据 添加数据库
             for i in 0...4 { //status == 1
                 let  model = IssueModel()
@@ -89,9 +92,9 @@ class IssueViewController: BaseViewController {
                 model.assgin = "INFO"
                 model.status = "1"
                 model.author = "Currie"
-                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
-                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
-                model.createDate =  Calendar.current.startOfDay(for: Date())
+                model.resolveDate =  Calendar.current.startOfDay(for: Date())
+                model.closeDate = date.addingTimeInterval(TimeInterval(-i*24*60*60))
+                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*60))
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"
@@ -111,9 +114,9 @@ class IssueViewController: BaseViewController {
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
-                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
-                model.createDate =  Calendar.current.startOfDay(for: Date())
+                model.resolveDate =  Calendar.current.startOfDay(for: Date())
+                model.closeDate = date.addingTimeInterval(TimeInterval(-i*24*60*60))
+                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*60))
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"
@@ -133,9 +136,7 @@ class IssueViewController: BaseViewController {
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
-                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
-                model.createDate =  Calendar.current.startOfDay(for: Date())
+                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*60))
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"
@@ -155,9 +156,7 @@ class IssueViewController: BaseViewController {
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.resolveDate = date.addingTimeInterval(TimeInterval(i*10*24*60*60))
-                model.closeDate = date.addingTimeInterval(TimeInterval(i*5*24*60*60))
-                model.createDate =  Calendar.current.startOfDay(for: Date())
+                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*60))
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"

@@ -12,10 +12,19 @@ import UIKit
 import Charts
 import SwiftUI
 
-
+struct DataModel {
+    var type: String
+    var value: String
+}
 class IssueReportLineChartView: UIView {
     
     var parties: [String?] = []
+    var y_value: Int = 0
+    var dataDictionary = Dictionary<String,[DataModel?]>()
+    var dataArr: [DataModel?] = {
+        let dataArr: [DataModel?] = []
+        return dataArr
+    }()
     
     private lazy var linechartView: LineChartView = {
         let linechartView = LineChartView()
@@ -44,19 +53,15 @@ class IssueReportLineChartView: UIView {
         linechartL.stackSpace = 20
         linechartL.xEntrySpace = 20
         
-        let xValues4 = ["Category 1","Category 2","Category 3","Category 4"]
         let xAxis1 = linechartView.xAxis
         xAxis1.labelFont = .systemFont(ofSize: 9)
         xAxis1.labelTextColor = .black
         xAxis1.drawAxisLineEnabled = false
         xAxis1.drawGridLinesEnabled = false
         xAxis1.forceLabelsEnabled = true;
-        linechartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xValues4)
         
         let leftAxis1 = linechartView.leftAxis
         leftAxis1.labelTextColor = UIColor(red: 51/255, green: 181/255, blue: 229/255, alpha: 1)
-        leftAxis1.axisMaximum = 6
-        leftAxis1.axisMinimum = 0
         leftAxis1.drawGridLinesEnabled = true
         leftAxis1.granularityEnabled = true
         linechartView.animate(xAxisDuration: 2.5)
@@ -76,19 +81,65 @@ class IssueReportLineChartView: UIView {
         }
     }
     
-    func setDataLineCount(_ count: Int, range: UInt32) {
-        let yVals1 = (0..<count).map { (i) -> ChartDataEntry in
-            let mult = range / 2
-            let val = Double(arc4random_uniform(mult) + 50)
-            return ChartDataEntry(x: Double(i), y: val)
+    func setDataCount(_ array : [IssueModel?] , _ timeDict : [String : Any]) {
+        var _minTinem = timeDict["startDate"]
+        var _maxTinem = timeDict["endDate"]
+        self.dataArr.removeAll()
+        if array.count == 0 {
+            linechartView.data = nil;
+            return;
         }
-        let yVals2 = (0..<count).map { (i) -> ChartDataEntry in
-            let val = Double(arc4random_uniform(range) + 450)
-            return ChartDataEntry(x: Double(i), y: val)
+        for model in array{
+
+            if _minTinem == nil || (model!.createDate!.compare(_minTinem as! Date) == .orderedAscending || model!.createDate!.compare(_minTinem as! Date) == .orderedSame){
+                _minTinem = model?.createDate
+                _maxTinem = Calendar.current.startOfDay(for: Date())
+            }
+            if model!.createDate != nil && ( model!.createDate?.compare(_minTinem as! Date) == .orderedDescending || model!.createDate!.compare(_minTinem as! Date) == .orderedSame){
+                let model =  DataModel(type: "createDate", value: GetWeekByDate(date: model!.createDate!))
+                dataArr.append(model)
+            }
+            if model!.closeDate != nil && (model!.closeDate?.compare((_minTinem as! Date)) == .orderedDescending || model!.createDate!.compare(_minTinem as! Date) == .orderedSame){
+                let model =  DataModel(type: "closeDate", value: GetWeekByDate(date: model!.closeDate!))
+                dataArr.append(model)
+
+            }
+            if model!.resolveDate != nil && (model!.resolveDate?.compare((_minTinem as! Date)) == .orderedDescending || model!.createDate!.compare(_minTinem as! Date) == .orderedSame){
+                
+                let model =  DataModel(type: "resolveDate", value: GetWeekByDate(date: model!.resolveDate!))
+                dataArr.append(model)
+
+            }
+           
         }
-        let yVals3 = (0..<count).map { (i) -> ChartDataEntry in
-            let val = Double(arc4random_uniform(range) + 500)
-            return ChartDataEntry(x: Double(i), y: val)
+        
+        dataDictionary = Dictionary(grouping: dataArr, by: { ($0?.value)!})
+        
+        let keys : Array = dataDictionary.sorted(by: {$0.0 < $1.0})
+
+        let yVals1 = (0..<keys.count).map { (i) -> ChartDataEntry in
+            var count = 0
+            for model in keys[i].value where model!.type == "createDate"{
+                count = count+1
+            }
+            print(ChartDataEntry(x: Double(i), y: Double(count)))
+            return ChartDataEntry(x: Double(i), y:  Double(count))
+        }
+        let yVals2 = (0..<keys.count).map { (i) -> ChartDataEntry in
+            var count = 0
+            for model in keys[i].value where model!.type == "closeDate"{
+                count = count+1
+            }
+            print(ChartDataEntry(x: Double(i), y: Double(count)))
+            return ChartDataEntry(x: Double(i), y: Double(count))
+        }
+        let yVals3 = (0..<keys.count).map { (i) -> ChartDataEntry in
+            var count = 0
+            for model in keys[i].value where model!.type == "resolveDate"{
+                count = count+1
+            }
+            print(ChartDataEntry(x: Double(i), y: Double(count)))
+            return ChartDataEntry(x: Double(i), y: Double(count))
         }
         
         let set1 = LineChartDataSet(entries: yVals1, label: "Income")
@@ -116,7 +167,7 @@ class IssueReportLineChartView: UIView {
         set2.drawCircleHoleEnabled = false
         set2.drawCirclesEnabled = false
         set2.drawValuesEnabled = false
-        
+
         let set3 = LineChartDataSet(entries: yVals3, label: "Close")
         set3.axisDependency = .right
         set3.setColor(UIColor(red: 242/255, green: 247/255, blue: 158/255, alpha: 1))
@@ -128,12 +179,57 @@ class IssueReportLineChartView: UIView {
         set3.drawCircleHoleEnabled = false
         set3.drawCirclesEnabled = false
         set3.drawValuesEnabled = false
-        
+
         let data = LineChartData(dataSets: [set1, set2, set3])
         data.setValueTextColor(.black)
         data.setValueFont(.systemFont(ofSize: 9))
-        linechartView.xAxis.axisMinimum = -0.8
         linechartView.data = data
+        
+       var xArray = [String]();
+        for str in keys{
+            xArray.append(str.key)
+            
+        }
+        
+        linechartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:xArray)
+        linechartView.xAxis.granularity = 1
+        linechartView.xAxis.axisMinimum = 0
+        linechartView.xAxis.axisMaximum = Double(xArray.count + 1)
+
+        func GetWeekByDate(date:Date) ->String{
+                guard let calendar = NSCalendar(identifier: NSCalendar.Identifier.gregorian) else {
+                    return ""
+                }
+            let components = calendar.components([.weekOfYear,.weekOfMonth,.weekday,.weekdayOrdinal,.year,.month], from: date)
+                //今年的第几周
+                let weekOfYear = components.weekOfYear!
+                
+                //这个月第几周
+                let weekOfMonth = components.weekOfMonth!
+            
+                //周几
+                let weekday = components.weekday!
+                //这个月第几周
+                let weekdayOrdinal = components.weekdayOrdinal!
+                let year = components.year!
+                let month = components.month!
+                print(weekOfYear)
+                print(weekOfMonth)
+                print(weekday)
+                print(weekdayOrdinal)
+            switch components.weekOfMonth {
+            case 1:
+                return "\(year)-\(month)-\(components.weekOfMonth!)st";
+            case 2:
+                return "\(year)-\(month)-\(components.weekOfMonth!)nd";
+            case 3:
+                return "\(year)-\(month)-\(components.weekOfMonth!)rd";
+            case 4:
+                return "\(year)-\(month)-\(components.weekOfMonth!)th";
+            default:
+                return "\(year)-\(month)-\(components.weekOfMonth!)th";
+            }
+        }
         
     }
     

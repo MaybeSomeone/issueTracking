@@ -16,6 +16,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     private var templateModel = FeedbackModel()
     private var takingPicture = UIImagePickerController()
     private var IsSaveTemplate = Bool()
+//    var iSTemplate = Bool()
     var Complete : () -> Void = {}
     
     private lazy var setFormView : SetFormView = {
@@ -78,6 +79,12 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             self.table.reloadData()
         }
     }
+    var iSTemplate: Bool? {
+        didSet {
+            self.editFormFootView.PublishBtn.isHidden = true
+            self.editFormFootView.TestingBtn.isHidden = true
+        }
+    }
     
     func configureAddNewIssueButton() {
         let addButton = UIButton(frame: CGRect(x: 0, y: 0, width: 22, height: 22))
@@ -102,6 +109,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         setFormView.setFromTabelView.dataSource = self
         table.register(EditTypeTabelViewCell.self, forCellReuseIdentifier: "EditTypeTabelViewCell")
         table.register(EditConfirmTabelViewCell.self, forCellReuseIdentifier: "EditConfirmTabelViewCell")
+        table.register(AddTemplateTabelViewCell.self, forCellReuseIdentifier: "AddTemplateTabelViewCell")
         setFormView.setFromTabelView.register(EditTypeTabelViewCell.self, forCellReuseIdentifier: "EditTypeTabelViewCell")
         
         setFormView.block = {() in
@@ -111,14 +119,17 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             self.hideshadeView()
         }
 
-        alertView.confirmBlock = {String in
+        alertView.confirmBlock = { [self]String in
             self.hideshadeView()
             self.templateModel.title = String
             self.templateModel.ID = "100\(arc4random_uniform(100) + 1)"
             RealmManagerTool.shareManager().addObject(object: self.templateModel, .template)
-            self.savedataModel()
-
-
+            if iSTemplate == false{
+                self.savedataModel()
+            }
+            else{
+                self.navigationController?.popViewController(animated: true)
+            }
         }
         ///点击publish
         editFormFootView.publishBtnBlock = {() in
@@ -138,7 +149,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     func saveFormModel(status : String){
         if self.dataModel.Child.count > 0{
             self.dataModel.status = status
-            if self.IsSaveTemplate == true{
+            if self.IsSaveTemplate == true || iSTemplate == true{
                 self.alertView.isHidden = false
             }
             else{
@@ -291,31 +302,46 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             }
             return cell
         }
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EditConfirmTabelViewCell", for: indexPath) as! EditConfirmTabelViewCell
-        if dataModel.Child.count == 0{
-            
-            cell.seletBtn.isHidden = true;
-            cell.titleLabel.isHidden = true;
+        if iSTemplate == true{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "AddTemplateTabelViewCell", for: indexPath) as! AddTemplateTabelViewCell
+            cell.backgroundColor = .clear
+            cell.block = {() in
+                
+                self.showshadeView()
+                
+            }
+
+            return cell
+
         }
         else{
+            let cell = tableView.dequeueReusableCell(withIdentifier: "EditConfirmTabelViewCell", for: indexPath) as! EditConfirmTabelViewCell
+            if dataModel.Child.count == 0{
+                
+                cell.seletBtn.isHidden = true;
+                cell.titleLabel.isHidden = true;
+            }
+            else{
+                
+                cell.seletBtn.isHidden = false;
+                cell.titleLabel.isHidden = false;
+
+            }
             
-            cell.seletBtn.isHidden = false;
-            cell.titleLabel.isHidden = false;
+            cell.backgroundColor = .clear
+            cell.block = {() in
+                
+                self.showshadeView()
+                
+            }
+            cell.SaveTemplateblock = {isSelected in
+                self.IsSaveTemplate = isSelected
+            }
+            
+            return cell
 
         }
         
-        cell.backgroundColor = .clear
-        cell.block = {() in
-            
-            self.showshadeView()
-            
-        }
-        cell.SaveTemplateblock = {isSelected in
-            self.IsSaveTemplate = isSelected
-        }
-        
-        return cell
 
     }
 

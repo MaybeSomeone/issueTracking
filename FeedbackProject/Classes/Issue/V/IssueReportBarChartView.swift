@@ -11,11 +11,11 @@ import UIKit
 import Charts
 import SwiftUI
 
-
 class IssueReportBarChartView: UIView {
 
     var parties: [String?] = []
-    
+    var y_value: Int = 0
+
     private lazy var barChartView: BarChartView = {
         let barChartView = BarChartView()
         barChartView.delegate  = self
@@ -35,16 +35,13 @@ class IssueReportBarChartView: UIView {
         barChartL.xOffset = 10
         barChartL.yEntrySpace = 0
         
-//        let xValues = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
         let xAxis = barChartView.xAxis
         xAxis.labelFont = .systemFont(ofSize: 10, weight: .light)
-        xAxis.granularity = 0.80
+        xAxis.granularity = 1
         xAxis.centerAxisLabelsEnabled = true
         xAxis.drawGridLinesEnabled = false
         xAxis.labelCount = 12
         xAxis.labelWidth = (CGFloat.screenWidth - 40)/12
-
-//        barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xValues)
 
         let leftAxisFormatter = NumberFormatter()
         leftAxisFormatter.maximumFractionDigits = 1
@@ -73,31 +70,50 @@ class IssueReportBarChartView: UIView {
         }
     }
     
-    func setDataBarCount(_ count: Int, range: UInt32) {
-        let groupSpace = 0.80
-        let barSpace = 0.05
-        let barWidth = 0.30
+    func setDataCount(_ dict : [String:[IssueModel?]]) {
+        
+        if dict.keys.count == 0 {
+            barChartView.data = nil;
+            return;
+        }
+        let groupSpace = 0.1
+        let barSpace = 0.2
+        let barWidth = 0.25
 
-        let randomMultiplier = range
+        // (0.2 + 0.25) * 2 + 0.10 = 1.00 -> interval per "group"
+        // (0.1 + 0.1) * 4 + 0.20 = 1.00 -> interval per "group"
+
+        barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: Array(dict.keys))
         
         let block: (Int) -> BarChartDataEntry = { (i) -> BarChartDataEntry in
-            return BarChartDataEntry(x: Double(i), y: Double(arc4random_uniform(randomMultiplier)))
+            var count = 0
+            print(Array(dict.values)[i])
+            
+            for model in Array(dict.values)[i] where model?.status == "0"{
+                count = count+1
+            }
+            
+            return BarChartDataEntry(x: Double(i), y: Double(count))
         }
-        let yVals1 = (0 ..< count).map(block)
-        let yVals2 = (0 ..< count).map(block)
-        let yVals3 = (0 ..< count).map(block)
+        let block1: (Int) -> BarChartDataEntry = { (i) -> BarChartDataEntry in
+            var count = 0
+            
+            for model in Array(dict.values)[i] where model?.status == "1" {
+                count = count+1
+            }
+                        
+            return BarChartDataEntry(x: Double(i), y: Double(count))
+        }
+        let yVals1 = (0 ..< dict.keys.count).map(block)
+        let yVals2 = (0 ..< dict.keys.count).map(block1)
         
-        let set1 = BarChartDataSet(entries: yVals1, label: "Figure legend 1")
+        let set1 = BarChartDataSet(entries: yVals1, label: "Open")
         set1.setColor(UIColor(red: 0/255, green: 132/255, blue: 255/255, alpha: 1))
         set1.drawValuesEnabled = false
-        let set2 = BarChartDataSet(entries: yVals2, label: "Figure legend 2")
+        let set2 = BarChartDataSet(entries: yVals2, label: "Close")
         set2.setColor(UIColor(red: 90/255, green: 216/255, blue: 166/255, alpha: 1))
         set2.drawValuesEnabled = false
         
-//        let set3 = BarChartDataSet(entries: yVals3, label: "Series 3")
-//        set3.setColor(UIColor(red: 242/255, green: 247/255, blue: 158/255, alpha: 1))
-//        set3.drawValuesEnabled = false
-//        let data = BarChartData(dataSets: [set1, set2, set3])
         
         let data = BarChartData(dataSets: [set1, set2])
         data.setValueFont(.systemFont(ofSize: 11, weight: .light))
@@ -105,12 +121,22 @@ class IssueReportBarChartView: UIView {
         // restrict the x-axis range
         barChartView.xAxis.axisMinimum = Double(0)
         barChartView.xAxis.labelPosition = .bottom
+//
+//        let xValues = ["Category 1","Category 2","Category 3","Category 4"]
+//        let xAxis = barChartView.xAxis
+//        xAxis.labelFont = .systemFont(ofSize: 10, weight: .light)
+//        xAxis.granularity = 1
+//        xAxis.centerAxisLabelsEnabled = true
+//        xAxis.drawGridLinesEnabled = false
+//        barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: xValues)
+
         barChartView.drawValueAboveBarEnabled = false
         // groupWidthWithGroupSpace(...) is a helper that calculates the width each group needs based on the provided parameters
-        barChartView.xAxis.axisMaximum = Double(0) + data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(count)
+        barChartView.xAxis.axisMaximum = Double(0) + data.groupWidth(groupSpace: groupSpace, barSpace: barSpace) * Double(dict.keys.count)
         
         data.groupBars(fromX: Double(0), groupSpace: groupSpace, barSpace: barSpace)
         
+
         barChartView.data = data
     }
     

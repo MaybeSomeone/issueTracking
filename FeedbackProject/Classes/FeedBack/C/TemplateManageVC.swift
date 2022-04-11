@@ -74,6 +74,7 @@ class TemplateManageVC: BaseViewController, UITableViewDelegate, UITableViewData
             cell.clickAddTemplateBlock = { () -> Void in
                 print("push to next viewcontroller")
                 let editFormVC = EditFromViewController()
+                editFormVC.iSTemplate = true
                 self.navigationController?.pushViewController(editFormVC, animated: true)
             }
             return cell
@@ -118,6 +119,7 @@ class TemplateManageVC: BaseViewController, UITableViewDelegate, UITableViewData
         let feedback = feedBackModel[indexPath.row]
         let editForm = EditFromViewController()
         editForm.model = feedback
+        editForm.iSTemplate = true
         self.navigationController?.pushViewController(editForm, animated: true)
     }
 }

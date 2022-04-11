@@ -45,6 +45,10 @@ class EditConfirmTabelViewCell: UITableViewCell {
         CustomizeBtn.setTitleColor(UIColor.rgba(25.0, G: 25.0, B: 25.0, A: 1.0), for: .normal)
         CustomizeBtn.titleLabel?.font = UIFont.font_commonBig18Title
         CustomizeBtn.layer.cornerRadius = 8
+        CustomizeBtn.layer.borderWidth = 1;
+        
+        CustomizeBtn.layer.borderColor = UIColor.rgba(217, G: 217, B: 217, A: 1.0).cgColor
+        CustomizeBtn.layer.backgroundColor = UIColor.rgba(255, G: 255, B: 255, A: 1.0).cgColor;
         CustomizeBtn.layer.masksToBounds = true
         CustomizeBtn.addTarget(self, action: #selector(customizeClick), for: .touchUpInside)
         return CustomizeBtn
@@ -83,7 +87,7 @@ class EditConfirmTabelViewCell: UITableViewCell {
         CustomizeBtn.snp.makeConstraints { (make) in
             make.left.equalToSuperview().offset(20)
             make.top.equalTo(seletBtn.snp.bottom).offset(21)
-            make.bottom.equalToSuperview().offset(-20)
+            make.height.equalTo(44)
             make.right.equalToSuperview().offset(-20)
         }
         

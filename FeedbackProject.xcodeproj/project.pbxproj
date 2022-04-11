@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A5FA98027F41C3D0093C2D2 /* chartsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5FA97F27F41C3C0093C2D2 /* chartsModel.swift */; };
+		3A5FA98227F45C340093C2D2 /*  AddTemplateTabelViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A5FA98127F45C340093C2D2 /*  AddTemplateTabelViewCell.swift */; };
 		640F12C327CEFD5100D066E0 /* AddNewIssueVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640F12C227CEFD5100D066E0 /* AddNewIssueVC.swift */; };
 		640F12C727CEFEA100D066E0 /* IntAxisValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640F12C627CEFEA100D066E0 /* IntAxisValueFormatter.swift */; };
 		640F12C927CF03E200D066E0 /* IssueSearchMoreFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640F12C827CF03E200D066E0 /* IssueSearchMoreFilterView.swift */; };
@@ -72,11 +74,12 @@
 		64BE5FD027E81E6E0050059D /* FormReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BE5FCE27E81E6E0050059D /* FormReportViewController.swift */; };
 		64CB74DE27D84F19006D262D /* CreateByTemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CB74DD27D84F19006D262D /* CreateByTemplateView.swift */; };
 		64CB74E027D8947D006D262D /* CreateByTemplateViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CB74DF27D8947D006D262D /* CreateByTemplateViewCell.swift */; };
-		64CB74E227D89FC1006D262D /* CreateByTemplateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64CB74E127D89FC1006D262D /* CreateByTemplateModel.swift */; };
 		8AAA5F69082D1A9F58D024EF /* Pods_FeedbackProject.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B636C9457D36FD4987813142 /* Pods_FeedbackProject.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3A5FA97F27F41C3C0093C2D2 /* chartsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chartsModel.swift; sourceTree = "<group>"; };
+		3A5FA98127F45C340093C2D2 /*  AddTemplateTabelViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " AddTemplateTabelViewCell.swift"; sourceTree = "<group>"; };
 		416ABFC6A87AA2EEFAA020F3 /* Pods-FeedbackProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FeedbackProject.debug.xcconfig"; path = "Target Support Files/Pods-FeedbackProject/Pods-FeedbackProject.debug.xcconfig"; sourceTree = "<group>"; };
 		5557129F6E9BA05AC05F7817 /* Pods-FeedbackProject.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FeedbackProject.release.xcconfig"; path = "Target Support Files/Pods-FeedbackProject/Pods-FeedbackProject.release.xcconfig"; sourceTree = "<group>"; };
 		640F12C227CEFD5100D066E0 /* AddNewIssueVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddNewIssueVC.swift; sourceTree = "<group>"; };
@@ -152,7 +155,6 @@
 		64BE5FCE27E81E6E0050059D /* FormReportViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FormReportViewController.swift; sourceTree = "<group>"; };
 		64CB74DD27D84F19006D262D /* CreateByTemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateByTemplateView.swift; sourceTree = "<group>"; };
 		64CB74DF27D8947D006D262D /* CreateByTemplateViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateByTemplateViewCell.swift; sourceTree = "<group>"; };
-		64CB74E127D89FC1006D262D /* CreateByTemplateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateByTemplateModel.swift; sourceTree = "<group>"; };
 		B636C9457D36FD4987813142 /* Pods_FeedbackProject.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FeedbackProject.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -347,6 +349,7 @@
 				646B51AE27D7475400FB923B /* FeedbackTableViewCell.swift */,
 				64CB74DD27D84F19006D262D /* CreateByTemplateView.swift */,
 				64CB74DF27D8947D006D262D /* CreateByTemplateViewCell.swift */,
+				3A5FA98127F45C340093C2D2 /*  AddTemplateTabelViewCell.swift */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -367,7 +370,6 @@
 			isa = PBXGroup;
 			children = (
 				646B51AC27D7474E00FB923B /* FeedbackModel.swift */,
-				64CB74E127D89FC1006D262D /* CreateByTemplateModel.swift */,
 			);
 			path = M;
 			sourceTree = "<group>";
@@ -428,6 +430,7 @@
 			isa = PBXGroup;
 			children = (
 				641A542627C87629000882DB /* IssueModel.swift */,
+				3A5FA97F27F41C3C0093C2D2 /* chartsModel.swift */,
 			);
 			path = M;
 			sourceTree = "<group>";
@@ -666,7 +669,6 @@
 				641A542727C87629000882DB /* IssueModel.swift in Sources */,
 				64BE5FC927E81E550050059D /* SetFormView.swift in Sources */,
 				64B69C7B27C487D300EDD866 /* AppConfig.swift in Sources */,
-				64CB74E227D89FC1006D262D /* CreateByTemplateModel.swift in Sources */,
 				64B69C9A27C4B36700EDD866 /* LoginModel.swift in Sources */,
 				6454E35827D9CCA000F3CA15 /* IssueReportPieChartView.swift in Sources */,
 				64B69C6527C482C100EDD866 /* BaseTabBarController.swift in Sources */,
@@ -692,10 +694,12 @@
 				64BE5FB227E817710050059D /* ImageTableView.swift in Sources */,
 				64BE5FB427E817710050059D /* MultipleChoiceTableView.swift in Sources */,
 				64BE5FD027E81E6E0050059D /* FormReportViewController.swift in Sources */,
+				3A5FA98227F45C340093C2D2 /*  AddTemplateTabelViewCell.swift in Sources */,
 				6454E35A27D9D0E700F3CA15 /* IssueReportBarChartView.swift in Sources */,
 				6424D45727C6021E00C85560 /* UIView+Extension.swift in Sources */,
 				6454E35C27D9D25800F3CA15 /* IssueReportLineChartView.swift in Sources */,
 				640F12CE27CF12E100D066E0 /* LMJDropdownMenu.m in Sources */,
+				3A5FA98027F41C3D0093C2D2 /* chartsModel.swift in Sources */,
 				64BE5FB727E817710050059D /* DropDownTableView.swift in Sources */,
 				640F12C927CF03E200D066E0 /* IssueSearchMoreFilterView.swift in Sources */,
 				64BE5FC827E81E550050059D /* AlertView.swift in Sources */,

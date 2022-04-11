@@ -12,6 +12,41 @@ import Charts
 import SwiftUI
 
 class IssueReportViewController: BaseViewController ,ChartViewDelegate{
+    var menuArr = [["Category","Finance","Sales","Human Resources"],
+                   ["Priority","Critical","High","Medium","Low"],
+                   ["Issue type","Feature","Task","Bug"],
+                   ["Statu","Open","In Progress","Resolved","Closed"],
+                   ["More"]]
+    
+    var categaryDictionary = [String:[IssueModel?]]()
+    var typeDictionary = [String:[IssueModel?]]()
+    var assigneeDictionary = [String:[IssueModel?]]()
+    
+    var timeDict = [String: Any]()
+    private lazy var dropDownMenu: CustomDropDownMenu = {
+        let dropDownMenu = CustomDropDownMenu(origin: .zero, height: 54, width: CGFloat.screenWidth)
+        dropDownMenu.datasource = self
+        dropDownMenu.delegate = self
+        return dropDownMenu
+    }()
+    
+    private var filterView = IssueSearchMoreFilterView()
+    
+    ///筛选条件字典
+    private var filterDict: [String: Any] = ["category": "0",
+                                             "priority": "0",
+                                             "type": "0",
+                                             "status": "0",
+                                             "assignee": "None",
+                                             "startDate": Date(),
+                                             "endDate": Date()]
+
+    var dataArr: [IssueModel?] = {
+        let dataArr: [IssueModel?] = []
+        return dataArr
+    }()
+
+
     
     /// 滚动视图
     lazy var scrollView: UIScrollView = {
@@ -23,7 +58,7 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
         return scr
     }()
     
-    let parties = ["Figure legend 1", "Figure legend 2", "Figure legend 3", "Figure legend 4", "Figure legend 5"]
+//    let parties = ["Figure legend 1", "Figure legend 2", "Figure legend 3", "Figure legend 4", "Figure legend 5"]
     /// Categary
     private lazy var caregoreBtn: UIButton = {
         let caregoreBtn = UIButton()
@@ -39,7 +74,7 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
     private lazy var caregorePieChartView: IssueReportPieChartView = {
         let caregorePieChartView = IssueReportPieChartView()
         caregorePieChartView.backgroundColor = .clear
-        caregorePieChartView.parties = parties
+//        caregorePieChartView.parties = categaryParties
         caregorePieChartView.isHidden = false
         return caregorePieChartView
     }()
@@ -59,7 +94,7 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
     private lazy var typechartView: IssueReportPieChartView = {
         let typechartView = IssueReportPieChartView()
         typechartView.backgroundColor = .clear
-        typechartView.parties = parties
+//        typechartView.parties = typeParties
         typechartView.isHidden = true
         return typechartView
     }()
@@ -75,7 +110,7 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
     private lazy var barChartView: IssueReportBarChartView = {
         let barChartView = IssueReportBarChartView()
         barChartView.backgroundColor = .clear
-        barChartView.parties = parties
+//        barChartView.parties = assigneeParties
         return barChartView
     }()
     /// Week Income/Resolve/Close Issue Count
@@ -90,7 +125,7 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
     private lazy var linechartView: IssueReportLineChartView = {
         let linechartView = IssueReportLineChartView()
         linechartView.backgroundColor = .clear
-        linechartView.parties = parties
+//        linechartView.parties = stutaParties
         return linechartView
     }()
 
@@ -98,15 +133,33 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
         super.viewDidLoad()
 
         setupSubviews()
-        updateChartData()
+        let data = RealmManagerTool.shareManager().queryObjects(objectClass: IssueModel.self, .issue)
+        for model in data.reversed() {
+            print(model)
+            dataArr.append(model)
+        }
         
+        categaryDictionary = Dictionary(grouping: dataArr, by: { ($0?.category)!})
+        typeDictionary = Dictionary(grouping: dataArr, by: { ($0?.type)!})
+        assigneeDictionary = Dictionary(grouping: dataArr, by: { ($0?.assignee)!})
+
+        updateChartData()
+
     }
     ///添加视图
     func setupSubviews() {
-        
+        view.addSubview(dropDownMenu)
+        dropDownMenu.snp.makeConstraints { (make) in
+            make.left.right.top.equalToSuperview()
+            make.height.equalTo(54)
+        }
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints { (make) in
-            make.edges.equalToSuperview()
+            make.left.equalToSuperview()
+            make.top.equalToSuperview().offset(54)
+            make.bottom.equalToSuperview()
+            make.right.equalToSuperview()
+
         }
         
         scrollView.addSubview(caregoreBtn)
@@ -177,13 +230,13 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
     ///更新数据
     func updateChartData() {
         
-        caregorePieChartView.setDataCount(Int(4), range: UInt32(100))
+        caregorePieChartView.setDataCount(self.categaryDictionary , type: "caregore")
     
-        typechartView.setDataCount(Int(3), range: UInt32(100))
+        typechartView.setDataCount(self.typeDictionary , type: "type")
+
+        barChartView.setDataCount(self.assigneeDictionary)
         
-        barChartView.setDataBarCount(Int(12), range:UInt32(12))
-        
-        linechartView.setDataLineCount(Int(5), range: UInt32(100))
+        linechartView.setDataCount(self.dataArr,self.timeDict)
     }
     
     ///caregoreBtnClicked
@@ -203,3 +256,115 @@ class IssueReportViewController: BaseViewController ,ChartViewDelegate{
     }
     
 }
+
+
+
+extension IssueReportViewController: CustomDropDownMenuDelegate, CustomDropDownMenuDataSource {
+    func numberOfColumns(in menu: CustomDropDownMenu) -> NSInteger {
+        return menuArr.count
+    }
+    
+    func numberOfRows(in column: NSInteger, for forMenu: CustomDropDownMenu) -> Int {
+        return menuArr[column].count
+    }
+    
+    func titleForRow(at indexPath: CustomIndexPath, for forMenu: CustomDropDownMenu) -> String {
+        return menuArr[indexPath.column][indexPath.row]
+    }
+    
+    func willSelectClickedRow(at index: Int, for menu: CustomDropDownMenu) {
+        if index == menuArr.count - 1 {
+            dropDownMenu.tableView.isHidden = true
+            dropDownMenu.backGroundView.isHidden = true
+            ///more 在这里弹出更多条件
+            let filterView = IssueSearchMoreFilterView()
+            filterView.filterDict = filterDict
+            filterView.show(form: self.view)
+            filterView.searchBackComplete = {[weak self] dict in
+                guard let weakself = self else { return }
+                weakself.dataArr.removeAll()
+                ///NSPredicate 筛选查询匹配
+                if ((dict["startDate"] as! Date != Date()) && (dict["endDate"] as! Date != Date())) {
+                    self!.timeDict = dict;
+                    ///时间筛选
+                    let defaultRealm = RealmManagerTool.shareManager().getDB(.issue)
+                    
+                    let datas = defaultRealm!.objects(IssueModel.self).filter("createDate BETWEEN %@ AND category = '\(dict["category"] ?? "0")' AND priority = '\(dict["priority"] ?? "0")' AND type = '\(dict["type"] ?? "0")' AND status = '\(dict["status"] ?? "0")' AND assignee = '\(dict["assignee"] ?? "None")'",[dict["startDate"], dict["endDate"]])
+
+                    guard datas.count > 0 else {
+                        self!.categaryDictionary = Dictionary(grouping: self!.dataArr, by: { ($0?.category)!})
+                        self!.typeDictionary = Dictionary(grouping: self!.dataArr, by: { ($0?.type)!})
+                        self!.assigneeDictionary = Dictionary(grouping: self!.dataArr, by: { ($0?.assignee)!})
+                        self!.updateChartData()
+                        return
+                    }
+                    
+                    for model in datas.reversed() {
+                        
+    
+                        _ = self!.dataArr.reduce([String:[IssueModel]]()) { (res, box) -> [String:[IssueModel]] in
+                            var res = res
+                            res[(box?.category)!] = (res[box!.category!] ?? [])
+                            return res
+                        }
+                        weakself.dataArr.append(model)
+                    }
+                  
+                }else{
+                    let data = RealmManagerTool.shareManager().queryObjects(objectClass: IssueModel.self, filter: "category = '\(dict["category"] ?? "0")' AND priority = '\(dict["priority"] ?? "0")' AND type = '\(dict["type"] ?? "0")' AND status = '\(dict["status"] ?? "0")' AND assignee = '\(dict["assignee"] ?? "None")'", .issue)
+                    for model in data.reversed() {
+                        weakself.dataArr.append(model)
+                    }
+                    _ = self!.dataArr.reduce([String:[IssueModel]]()) { (res, box) -> [String:[IssueModel]] in
+                        var res = res
+                        res[(box?.category)!] = (res[box!.category!] ?? [])
+                        return res
+                    }
+
+                }
+                weakself.categaryDictionary = Dictionary(grouping: weakself.dataArr, by: { ($0?.category)!})
+                weakself.typeDictionary = Dictionary(grouping: weakself.dataArr, by: { ($0?.type)!})
+                weakself.assigneeDictionary = Dictionary(grouping: weakself.dataArr, by: { ($0?.assignee)!})
+                weakself.updateChartData()
+
+            }
+            
+            self.filterView = filterView
+        }else{
+            dropDownMenu.tableView.isHidden = false
+            dropDownMenu.backGroundView.isHidden = false
+        }
+    }
+    
+    func didSelectRow(at indexPath: CustomIndexPath, for forMenu: CustomDropDownMenu) {
+        
+        dataArr.removeAll()
+        switch indexPath.column { ///筛选条件，筛选数据
+        case 0:
+            filterDict["category"] = "\(indexPath.row)"
+        case 1:
+            filterDict["priority"] = "\(indexPath.row)"
+        case 2:
+            filterDict["type"] = "\(indexPath.row)"
+        case 3:
+            filterDict["status"] = "\(indexPath.row)"
+        default:
+            break
+        }
+        
+        ///NSPredicate 筛选查询匹配
+        let data = RealmManagerTool.shareManager().queryObjects(objectClass: IssueModel.self, filter: "category = '\(filterDict["category"] ?? "0")' AND priority = '\(filterDict["priority"] ?? "0")' AND type = '\(filterDict["type"] ?? "0")' AND status = '\(filterDict["status"] ?? "0")'", .issue)
+        print(data)
+
+        for model in data.reversed() {
+            dataArr.append(model)
+        }
+        print(dataArr)
+        categaryDictionary = Dictionary(grouping: dataArr, by: { ($0?.category)!})
+        typeDictionary = Dictionary(grouping: dataArr, by: { ($0?.type)!})
+        assigneeDictionary = Dictionary(grouping: dataArr, by: { ($0?.assignee)!})
+        updateChartData()
+
+    }
+}
+

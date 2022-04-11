@@ -28,7 +28,7 @@ class FeedbackTableViewCell: UITableViewCell {
                 }else if model?.status == "1" {
                     statusLabel.text = "Testing"
                 }else if model?.status == "2" {
-                    statusLabel.text = "Save"
+                    statusLabel.text = "Draft"
                 }else if model?.status == "3" {
                     statusLabel.text = "Publish"
                 }

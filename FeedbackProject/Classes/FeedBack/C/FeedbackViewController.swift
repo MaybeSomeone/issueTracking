@@ -71,7 +71,7 @@ class FeedbackViewController: BaseViewController {
                 
                 let names = ["Event","Raffle","Business","Project","Other","Event","Raffle","Business","Project","Other"]
                 let templateView = CreateByTemplateView()
-                let data = RealmManagerTool.shareManager().queryObjects(objectClass: CreateByTemplateModel.self, .template)
+                let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .template)
                 
                 
                 if data.count > 0 {
@@ -81,7 +81,7 @@ class FeedbackViewController: BaseViewController {
                 }else{
                     //添加假数据 添加数据库
                     for i in 0...names.count - 1 {
-                        let  model = CreateByTemplateModel()
+                        let  model = FeedbackModel()
                         model.ID = "\(i + 1)"
                         model.title = names[i]
                         model.descriptio = "This is a requirement"

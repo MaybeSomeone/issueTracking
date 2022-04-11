@@ -22,7 +22,7 @@ class EditFormFootView: UIView {
     var publishBtnBlock : publishBtnBlock?
 
     
-    private  lazy var TestingBtn: UIButton = {
+      lazy var TestingBtn: UIButton = {
        let TestingBtn = UIButton()
         TestingBtn.setTitle("Testing", for: .normal)
         TestingBtn.setTitleColor(.cancelbtnColor, for: .normal)
@@ -35,7 +35,7 @@ class EditFormFootView: UIView {
         TestingBtn.addTarget(self, action: #selector(TestingBtnAction(_:)), for: .touchUpInside)
        return TestingBtn
    }()
-    private  lazy var SaveBtn: UIButton = {
+      lazy var SaveBtn: UIButton = {
        let SaveBtn = UIButton()
         SaveBtn.setTitle("Save", for: .normal)
         SaveBtn.setTitleColor(.white, for: .normal)
@@ -48,7 +48,7 @@ class EditFormFootView: UIView {
         SaveBtn.addTarget(self, action: #selector(SaveBtnAction(_:)), for: .touchUpInside)
        return SaveBtn
    }()
-    private  lazy var PublishBtn: UIButton = {
+      lazy var PublishBtn: UIButton = {
        let PublishBtn = UIButton()
         PublishBtn.setTitle("Publish", for: .normal)
         PublishBtn.setTitleColor(.cancelbtnColor, for: .normal)

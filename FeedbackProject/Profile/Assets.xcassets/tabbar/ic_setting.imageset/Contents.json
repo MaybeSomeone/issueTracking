@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ic_setting.png",
+      "filename" : "ic_my.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "ic_setting@2x.png",
+      "filename" : "ic_my@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "ic_setting@3x.png",
+      "filename" : "ic_my@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

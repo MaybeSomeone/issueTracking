@@ -25,11 +25,14 @@ class FeedbackTableViewCell: UITableViewCell {
                 authorLabel.text = "Author:\(model?.author ?? "")"
                 if model?.status == "0" {
                     statusLabel.text = "All"
-                }else if model?.status == "1" {
-                    statusLabel.text = "Testing"
-                }else if model?.status == "2" {
+                }
+//                else if model?.status == "1" {
+//                    statusLabel.text = "Testing"
+//                }
+                
+                else if model?.status == "1" {
                     statusLabel.text = "Draft"
-                }else if model?.status == "3" {
+                }else if model?.status == "2" {
                     statusLabel.text = "Publish"
                 }
             }

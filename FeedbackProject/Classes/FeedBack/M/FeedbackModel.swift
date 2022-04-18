@@ -35,7 +35,7 @@ class FeedbackModel: Object ,NSCopying{
     
     @objc dynamic var descriptio: String? // descriptio描述
     
-    @objc dynamic var status: String? //all 0 "Testing" 1 ,"Save" 2 ,"Publish" 3
+    @objc dynamic var status: String? //all 0  ,"Draft" 1 ,"Publish" 2  "Testing" 1
     
     @objc dynamic var createDate : Date? // createDate
      

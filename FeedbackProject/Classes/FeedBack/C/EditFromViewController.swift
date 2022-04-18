@@ -11,6 +11,8 @@ import Photos
 
 class EditFromViewController: BaseViewController,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate & UINavigationControllerDelegate{
 
+    var titleLabel : String?
+    
     private var dataModel = FeedbackModel()
     private var editDataModel = FeedbackModel()
     private var templateModel = FeedbackModel()
@@ -60,7 +62,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        title = "Edit Form"
+        title = titleLabel
         configureAddNewIssueButton()
         creatdata()
         setupUI()

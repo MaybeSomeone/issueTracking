@@ -720,6 +720,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         model.type = requestMode.issueTypeIndex
         model.status = requestMode.statusIndex
         model.assgin = requestMode.assigneeIndex
+        model.assignee = requestMode.assigneeIndex
         model.comments = commentsTextView.text
         model.repro = reproTextView.text
         model.descriptio = desTextView.text

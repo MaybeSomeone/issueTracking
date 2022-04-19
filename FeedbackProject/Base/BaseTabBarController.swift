@@ -35,7 +35,7 @@ class BaseTabBarController: UITabBarController {
     /// 设置子控制器
     private func setupChildViewControllers() {
         addChildViewController(IssueHomeViewController(), title: "Issue traking", imageName: "ic_issue")
-        addChildViewController(FeedbackHomeViewController(), title: "Feedback", imageName: "ic_feedback")
+        addChildViewController(FeedbackViewController(), title: "Feedback", imageName: "ic_feedback")
         addChildViewController(InfoViewController(), title: "Info", imageName: "ic_setting")
     }
     

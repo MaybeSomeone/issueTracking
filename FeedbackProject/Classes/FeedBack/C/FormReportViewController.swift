@@ -25,7 +25,7 @@ class FormReportViewController: BaseViewController,UITableViewDelegate,UITableVi
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        title = "Edit Form"
+        title = "Report"
         setupUI()
         
     }

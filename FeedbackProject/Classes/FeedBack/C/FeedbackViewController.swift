@@ -145,11 +145,9 @@ class FeedbackViewController: BaseViewController {
                 let templateManageVC = TemplateManageVC()
                 templateManageVC.hidesBottomBarWhenPushed = true
                 self?.navigationController?.pushViewController(templateManageVC, animated: true)
-
             default:
                 break
             }
-
         }
         return menuView!
     }()
@@ -170,7 +168,6 @@ class FeedbackViewController: BaseViewController {
         super.viewWillAppear(animated)
         isCopy = false
     }
-    
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
@@ -201,7 +198,7 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if isCopy == true{
+        if isCopy == true {
             let selectedData = dataArr[indexPath.row]
             let editForm = EditFromViewController()
             editForm.hidesBottomBarWhenPushed = true
@@ -216,9 +213,7 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
                 self.tableView.reloadData()
             }
             self.navigationController?.pushViewController(editForm, animated: true)
-            
-        }
-        else{
+        } else {
             let selectedData = dataArr[indexPath.row]
 //            let formDetailVC = FormDetailVC(feedbackObj: selectedData!)
 //            formDetailVC.hidesBottomBarWhenPushed = true

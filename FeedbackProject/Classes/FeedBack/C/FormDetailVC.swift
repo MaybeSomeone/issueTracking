@@ -113,7 +113,6 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
     }
 
     override func viewDidLoad() {
@@ -129,10 +128,13 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
     
     // MARK: - UITableView Delegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataSource.count
+        return dataSource.count + 1
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if (indexPath.row == dataSource.count) {
+            return 100
+        }
         let dataOriginal = dataSource[indexPath.row]
 
         switch dataOriginal.type {
@@ -156,9 +158,26 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
     }
    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let dataOriginal = dataSource[indexPath.row]
         let cell = UITableViewCell(style: .default, reuseIdentifier: "tableViewCell")
         cell.selectionStyle = .none
+        
+        if (indexPath.row == dataSource.count) {
+            let btn = UIButton()
+            let cell = UITableViewCell()
+            btn.translatesAutoresizingMaskIntoConstraints = false
+            cell.contentView.addSubview(btn)
+            cell.separatorInset = UIEdgeInsets(top: 0,left: cell.bounds.size.width * 2,bottom: 0,right: 0 )
+            btn.setTitle("Submit", for: .normal)
+            btn.snp.makeConstraints { make in
+                make.height.equalTo(50);
+                make.width.equalTo(200);
+                make.center.equalToSuperview()
+            }
+            btn.layer.cornerRadius = 5
+            btn.backgroundColor = UIColor.navbarColor
+            return cell
+        }
+        let dataOriginal = dataSource[indexPath.row]
         
         switch dataOriginal.type {
             case "Label":

@@ -60,13 +60,19 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     }()
     
     override func viewDidLoad() {
-        
         super.viewDidLoad()
         title = titleLabel
         configureAddNewIssueButton()
         creatdata()
         setupUI()
-                
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
+    deinit {
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     @objc func tapAddButton() {
@@ -143,9 +149,11 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         }
         ///点击testing
         editFormFootView.testingBtnBlock = {() in
-            self.saveFormModel(status: "1")
+//            self.saveFormModel(status: "1")
+            print("test:111111111111111")
+            let formDetailVC = FormDetailVC(feedbackObj: self.dataModel)
+            self.navigationController?.pushViewController(formDetailVC, animated: true)
         }
-
     }
     ///feekModel存入数据库
     func saveFormModel(status : String){
@@ -308,13 +316,9 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             let cell = tableView.dequeueReusableCell(withIdentifier: "AddTemplateTabelViewCell", for: indexPath) as! AddTemplateTabelViewCell
             cell.backgroundColor = .clear
             cell.block = {() in
-                
                 self.showshadeView()
-                
             }
-
             return cell
-
         }
         else{
             let cell = tableView.dequeueReusableCell(withIdentifier: "EditConfirmTabelViewCell", for: indexPath) as! EditConfirmTabelViewCell
@@ -339,12 +343,8 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             cell.SaveTemplateblock = {isSelected in
                 self.IsSaveTemplate = isSelected
             }
-            
             return cell
-
         }
-        
-
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

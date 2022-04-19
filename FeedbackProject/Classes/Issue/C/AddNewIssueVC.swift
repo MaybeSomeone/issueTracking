@@ -535,7 +535,6 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         let line = UIView()
         line.backgroundColor = lineColor
         
-        
         superView.addSubviews([label, textView, line])
         
         label.snp.makeConstraints { make in
@@ -558,7 +557,6 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
             make.height.equalTo(1)
         }
     }
-    
     
     func constructSnpImage(superView: UIView) {
         let label = UILabel()
@@ -674,7 +672,6 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
     }
     
     @objc func clickCreateButton() {
-        
         if (requestMode.title.count == 0) {
             return CustomProgressHud.showError(withStatus: "title cannot be empty!")
         }
@@ -727,8 +724,6 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         model.createDate = Date()
         model.author = loginModel?.username
         model.snpImage = requestMode.snapImage
-        
-        
         
         if (isAddNewRecord) {
             RealmManagerTool.shareManager().addObject(object: model, .issue)

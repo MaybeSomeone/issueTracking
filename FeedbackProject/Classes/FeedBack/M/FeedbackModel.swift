@@ -49,7 +49,7 @@ class FeedbackModel: Object ,NSCopying{
         return "ID"
     }
     
-      var Child = List<FromChildTypeModel>()
+    var Child = List<FromChildTypeModel>()
 
 }
 

@@ -7,7 +7,12 @@
 
 import UIKit
 
+
 class SingleChoiceTableView: UIView {
+    
+    var selected: SelectedBlock?;
+    
+    var unselectedBlock: UnselectedBlock?;
     
     var dataSource: Array<String>? {
         didSet {
@@ -79,7 +84,6 @@ class SingleChoiceTableView: UIView {
                 selectedButton.addTarget(self, action: #selector(toggleTheBackground), for: .touchUpInside)
                 selectedButton.tag = 10000+i
                 selectedButton.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
-
                 i += 1
             }
         }
@@ -99,6 +103,7 @@ class SingleChoiceTableView: UIView {
 //                currentView?.backgroundColor = UIColor.white
             } else {
                 currentButton?.setImage(UIImage(named: "feedback_form_ic_checkbox_selected"), for: .normal)
+                self.selected!("\(dataSource![(sender.tag - 10000)])")
             }
         }
     }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 struct ComponentMode {
     var type: String
@@ -15,11 +16,17 @@ struct ComponentMode {
     var multipleChoiceList: Array<String>?
 }
 
-
-
 class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate & UINavigationControllerDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
     var feedBackMode:FeedbackModel
+    
+    var publish: Bool
+    
+    let collection = CollectDataModel()
+    
+    var existSingle: Bool = false
+    
+    var existMult: Bool = false
     
     var dataSource: Array<ComponentMode> = [
 //        ComponentMode(type: "Label", title: "Title"),
@@ -48,8 +55,9 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         fatalError("error")
     }
     
-    init(feedbackObj: FeedbackModel) {
+    init(feedbackObj: FeedbackModel, publish: Bool) {
         self.feedBackMode = feedbackObj
+        self.publish = publish;
         super.init(nibName: nil, bundle: nil)
         for child in feedBackMode.Child {
             print("child.type \(String(describing: child.type))")
@@ -70,6 +78,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                     }
                     let singleComponent = ComponentMode(type: "Single", title: child.title ?? "SingleChoice", dropDownList: nil, singleChoiceList: singleChoiceList, multipleChoiceList: nil)
                     dataSource.append(singleComponent)
+                    existSingle = true
                 break
                 case "3":
                     var multiChoiceList:[String] = []
@@ -79,7 +88,9 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                         }
                     }
                     let multiComponent = ComponentMode(type: "Multi", title: child.title ?? "Multi", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: multiChoiceList)
+                
                     dataSource.append(multiComponent)
+                    existMult = true
                 break
                 case "4":
                     let richTextComponent = ComponentMode(type: "RichText", title: child.title ?? "RichText", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
@@ -220,6 +231,10 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                 make.height.equalTo(100)
                 make.edges.equalToSuperview()
             }
+            single.selected = {(selectedItem: String) -> Void in
+                self.collection.singleSelected.removeAll()
+                self.collection.singleSelected.append(selectedItem)
+            }
             case "Multi":
             let multi = MultipleChoiceTableView()
             multi.title = "Advice"
@@ -228,6 +243,13 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
             multi.snp.makeConstraints { make in
                 make.height.equalTo(100)
                 make.edges.equalToSuperview()
+            }
+            multi.selected = {(selectedItem: String) -> Void in
+                self.collection.multitedSelected.append(selectedItem)
+            }
+            multi.unselectedBlock = {(unselectedItem: String) -> Void in
+                self.collection.multitedSelected.remove(at: self.collection.multitedSelected.firstIndex(of: unselectedItem)!)
+                print(self.collection.multitedSelected);
             }
             case "Image":
             let imageComponent = ImageTableView()
@@ -260,15 +282,28 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @objc func submitBtnClick() {
-        self.showAlter(title: "Warning", message: "Current testig mode cannot submit any data", sureTit: "Publish", cancelTit: "OK") {
-            self.showAlter(title: "Publish Action", message: "If set current form to publish mode, cannot edit anymore, sure??", sureTit: "Publish", cancelTit: "NO") {
-                self.saveFormModel(status: "3")
-            } cancelBlock: {
-                print("do nothing");
+        if (publish) {
+            collection.ID = "100\(arc4random_uniform(100) + 1)"
+            collection.FormId = feedBackMode.ID
+            if (collection.singleSelected.count == 0 && existSingle) {
+                return CustomProgressHud.showError(withStatus: "single selected cannot be empty!")
             }
-
-        } cancelBlock: {
-            print("cancel block")
+            if (collection.multitedSelected.count == 0 && existMult) {
+                return CustomProgressHud.showError(withStatus: "multiple selected cannot be empty!")
+            }
+            
+            print(collection)
+            RealmManagerTool.shareManager().addObject(object: self.collection, .publish)
+        } else {
+            self.showAlter(title: "Warning", message: "Current testig mode cannot submit any data", sureTit: "Publish", cancelTit: "OK") {
+                self.showAlter(title: "Publish Action", message: "If set current form to publish mode, cannot edit anymore, sure??", sureTit: "Publish", cancelTit: "NO") {
+                    self.saveFormModel(status: "3")
+                } cancelBlock: {
+                    print("do nothing");
+                }
+            } cancelBlock: {
+                print("cancel block")
+            }
         }
     }
     

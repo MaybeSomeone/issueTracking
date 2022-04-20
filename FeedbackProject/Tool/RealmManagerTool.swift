@@ -22,8 +22,8 @@ enum RealmDANameType: String {
     case issue = "/IssueDB.realm"
     ///template数据
     case template = "/TemplateDB.realm"
-    
-   
+    /// publish
+    case publish = "/publish.realm"
 }
 
 extension RealmDANameType: EnumeratableEnumType {

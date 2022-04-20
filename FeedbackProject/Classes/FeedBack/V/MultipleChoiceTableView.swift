@@ -7,7 +7,16 @@
 
 import UIKit
 
+typealias SelectedBlock = (_ selectedItem: String)->Void
+
+typealias UnselectedBlock = (_ unselectedItem: String)->Void
+
+
 class MultipleChoiceTableView: UIView {
+    
+    var selected: SelectedBlock?;
+    
+    var unselectedBlock: UnselectedBlock?;
     
     var dataSource: Array<String>? {
         didSet {
@@ -76,7 +85,8 @@ class MultipleChoiceTableView: UIView {
 //                selectedButton.layer.borderColor = UIColor.red.cgColor
                 selectedButton.addTarget(self, action: #selector(toggleTheBackground), for: .touchUpInside)
                 selectedButton.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
-                selectedButton.tag = 0
+                selectedButton.isSelected = false
+                selectedButton.tag = i;
                 i += 1
             }
         }
@@ -85,12 +95,14 @@ class MultipleChoiceTableView: UIView {
     
     @objc func toggleTheBackground(sender: UIButton) {
         print(sender.tag);
-        if (sender.tag == 0) {
+        if (sender.isSelected == false) {
+            sender.isSelected = true
             sender.setImage(UIImage(named: "feedback_form_ic_checkbox_selected"), for: .normal)
-            sender.tag = 1
+            selected!("\(dataSource![sender.tag])")
         } else {
-            sender.tag = 0
+            sender.isSelected = false
             sender.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
+            unselectedBlock!("\(dataSource![sender.tag])")
         }
     }
     

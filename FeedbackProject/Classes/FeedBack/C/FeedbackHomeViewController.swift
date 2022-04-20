@@ -90,9 +90,11 @@ class FeedbackHomeViewController: WMPageController {
                     
                     print("跳转ByTemplateView=========================\(templateModel)")
                     
-                    let templateManageVC = TemplateManageVC()
-                    templateManageVC.hidesBottomBarWhenPushed = true
-                    weakself.navigationController?.pushViewController(templateManageVC, animated: true)
+//                    let templateManageVC = TemplateManageVC()
+                    let editFormVC = EditFromViewController()
+                    editFormVC.model = templateModel
+//                    templateManageVC.hidesBottomBarWhenPushed = true
+                    weakself.navigationController?.pushViewController(editFormVC, animated: true)
                     
                 }
                 templateView.show()

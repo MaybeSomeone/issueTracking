@@ -148,6 +148,8 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         }
         ///点击publish
         editFormFootView.publishBtnBlock = {() in
+            let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
+            self.navigationController?.pushViewController(formDetailVC, animated: true)
             self.saveFormModel(status: "3")
         }
         ///点击save
@@ -158,8 +160,8 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         editFormFootView.testingBtnBlock = {() in
 //            self.saveFormModel(status: "1")
             print("test:111111111111111")
-            let formDetailVC = FormDetailVC(feedbackObj: self.dataModel)
-            self.navigationController?.pushViewController(formDetailVC, animated: true)
+            let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: false)
+            self.navigationController?.pushViewController(formDetailVC, animated: false)
         }
     }
     ///feekModel存入数据库
@@ -175,7 +177,6 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         }
         else{
             CustomProgressHud.showError(withStatus: "Option cannot be empty!")
-
         }
     }
     
@@ -189,8 +190,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         self.dataModel.descriptio = self.dataModel.Child[1].title
         RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
         self.Complete()
-        self.navigationController?.popViewController(animated: true)
-
+//        self.navigationController?.popViewController(animated: true)
     }
     
     ///创建编辑菜单数据源

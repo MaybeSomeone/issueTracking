@@ -28,6 +28,8 @@ class SetFormView: UIView {
      lazy var setFromTabelView: UITableView = {
          let setFromTabelView = UITableView(frame:CGRect(x: 0, y: 0, width: CGFloat.screenWidth, height: CGFloat.screenWidth - AppConfig.mWindowSafebottom()), style: .plain)
         setFromTabelView.separatorStyle = .none
+        setFromTabelView.rowHeight = UITableView.automaticDimension
+        setFromTabelView.estimatedRowHeight = 300
          if #available(iOS 15.0, *) {
              setFromTabelView.sectionHeaderTopPadding = 0
          }

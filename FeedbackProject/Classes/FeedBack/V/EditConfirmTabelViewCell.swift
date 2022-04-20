@@ -89,6 +89,8 @@ class EditConfirmTabelViewCell: UITableViewCell {
             make.top.equalTo(seletBtn.snp.bottom).offset(21)
             make.height.equalTo(44)
             make.right.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview().offset(-21)
+
         }
         
     }

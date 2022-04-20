@@ -7,30 +7,64 @@
 
 import UIKit
 
-class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollectionViewDataSource ,UITextFieldDelegate{
+typealias heightBlock = ()->Void
+
+class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollectionViewDataSource ,UITextFieldDelegate, UITextViewDelegate{
     
     var addImageblock : tapBlock?
     
+    var upddateheight : heightBlock?
+
     var checkTitle: (_ model: FromChildTypeModel) -> Void = {_ in}
 
-    lazy var titleLabel: UITextField = {
-        let titleLabel = UITextField ()
-        titleLabel.isUserInteractionEnabled = false
+    lazy var titleLabel: UITextView = {
+        let titleLabel = UITextView ()
+        titleLabel.isUserInteractionEnabled = true
+        titleLabel.placeholder = "请输入"
         titleLabel.font = UIFont.font_commonViewTitle
         titleLabel.textAlignment = .left
+        titleLabel.isScrollEnabled = false
         titleLabel.delegate = self
         return titleLabel
     }()
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        model?.title = textField.text
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        
+        if textView == titleLabel{
+            model?.title = textView.text
+        }
+        else{
+            model?.content = textView.text
+        }
     }
     
-    private lazy var customField: UITextField = {
-        let field = UITextField ()
+        func textViewDidChange(_ textView: UITextView) {
+            // 储存原textView的大小
+            let oldSize = textView.frame.size
+    
+            // 预设textView的大小，宽度设为固定宽度，高度设为CGFloat的最大值
+            let presetSize = CGSize(width: textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)
+    
+            // 重新计算textView的实际大小
+            let newSize = textView.sizeThatFits(presetSize)
+    
+            // 更新textView的大小
+            textView.frame = CGRect(origin: CGPoint(x: textView.frame.origin.x, y: textView.frame.origin.y), size: CGSize(width: textView.frame.size.width, height: newSize.height))
+    
+            // 当高度变化时，刷新tableview（beginUpdates和endUpdates必须成对使用）
+            if newSize.height != oldSize.height {
+                self.upddateheight?()
+            }
+        }
+     lazy var customField: UITextView = {
+        let field = UITextView ()
         field.placeholder = "请输入"
-        field.isUserInteractionEnabled = false
+        field.isUserInteractionEnabled = true
         field.font = UIFont.font_commonViewTitle
         field.textAlignment = .left
+        field.isScrollEnabled = false
+        field.delegate = self
+
         return field
     }()
     
@@ -38,8 +72,9 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
         let textView = UITextView ()
         textView.font = UIFont.font_commonViewTitle
         textView.placeholderLabel.text = "请输入"
-        textView.isUserInteractionEnabled = false
+        textView.isUserInteractionEnabled = true
         textView.textAlignment = .left
+        textView.delegate = self
         return textView
     }()
     
@@ -84,7 +119,7 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
             let chioceModel  = ChioceModel ()
             chioceModel.title = String
             self.model?.chioceList.insert(chioceModel, at: 0)
-            self.model?.height = Int(self.collectView.contentSize.height + 40 >= 64 ? self.collectView.contentSize.height + 40 : 64)
+            self.model?.height = Int(self.collectView.contentSize.height + 22 >=  44 ? self.collectView.contentSize.height + 22: 44)
             self.checkTitle(self.model!)
             self.layoutSubviews()
 
@@ -97,7 +132,114 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
     var model: FromChildTypeModel? {
         didSet {
             titleLabel.text = model?.title
+            textView.text = model?.content
+            customField.text = model?.content
+            
             collectView.reloadData()
+            titleLabel.snp.makeConstraints { (make) in
+                make.left.equalToSuperview().offset(20)
+                make.right.equalToSuperview().offset(-62)
+                make.top.equalToSuperview().offset(20)
+            }
+            
+            rightImageView.snp.makeConstraints { (make) in
+                make.centerY.equalToSuperview()
+                make.right.equalToSuperview().offset(-16)
+                make.height.equalTo(22)
+                make.width.equalTo(22)
+            }
+            lineView.snp.makeConstraints { (make) in
+                make.left.equalToSuperview().offset(20)
+                make.right.equalToSuperview().offset(-20)
+                make.bottom.equalToSuperview()
+                make.height.equalTo(0.5)
+
+            }
+        
+            if self.editStatu == "0"{
+                rightImageView.image = (UIImage(named: "feedback_form_ic_date"))
+            }
+            else if self.editStatu == "1"{
+                if model?.isSelet == true{
+                    rightImageView.image = (UIImage(named: "feedback_form_ic_checkbox_selected"))
+                }
+                else{
+                    
+                    rightImageView.image = (UIImage(named: "feedback_form_ic_checkbox"))
+                }
+
+            }
+            else {
+                rightImageView.image = (UIImage(named: "feedback_form_ic_date"))
+            }
+
+          
+            if model?.type == "0" || model?.type == "1"{
+                self.customField.isHidden = false
+                self.collectView.isHidden = true
+                self.textView.isHidden = true
+                customField.snp.remakeConstraints { (make) in
+                    make.left.equalToSuperview().offset(140)
+                    make.top.equalToSuperview().offset(20)
+                    make.right.equalTo(rightImageView.snp.left).offset(-20)
+                    make.bottom.equalToSuperview().offset(-20)
+                }
+                collectView.snp.remakeConstraints { (make) in
+                }
+                textView.snp.remakeConstraints { (make) in
+                }
+            }
+            else if model?.type == "2" || model?.type == "3"{
+                self.customField.isHidden = true
+                self.textView.isHidden = true
+                self.collectView.isHidden = false
+                collectView.snp.remakeConstraints{ (make) in
+                    make.left.equalToSuperview().offset(20)
+                    make.right.equalToSuperview().offset(-62)
+                    make.top.equalTo(titleLabel.snp.bottom)
+                    make.height.equalTo(Int(self.model!.height))
+                    make.bottom.equalToSuperview().offset(-20)
+                }
+                customField.snp.remakeConstraints { (make) in
+                }
+                textView.snp.remakeConstraints { (make) in
+                }
+            }
+            else if model?.type == "4"{
+                self.customField.isHidden = true
+                self.collectView.isHidden = true
+                self.textView.isHidden = false
+                textView.snp.remakeConstraints { (make) in
+                    make.left.equalToSuperview().offset(140)
+                    make.right.equalTo(rightImageView.snp.left).offset(-20)
+                    make.top.equalToSuperview().offset(20)
+                    make.height.equalTo(100)
+                    make.bottom.equalToSuperview().offset(-20)
+                }
+                customField.snp.remakeConstraints { (make) in
+                }
+                collectView.snp.remakeConstraints { (make) in
+                }
+            }
+            else if model?.type == "5" {
+                
+                self.customField.isHidden = true
+                self.textView.isHidden = true
+                self.collectView.isHidden = false
+                collectView.snp.remakeConstraints{ (make) in
+                    make.left.equalToSuperview().offset(20)
+                    make.right.equalToSuperview().offset(-62)
+                    make.top.equalTo(titleLabel.snp.bottom)
+                    make.height.equalTo(Int(self.model!.height))
+                    make.bottom.equalToSuperview().offset(-20)
+                }
+                customField.snp.remakeConstraints { (make) in
+                }
+                textView.snp.remakeConstraints { (make) in
+                }
+
+            }
+
         }
     }
     var editStatu: String? {
@@ -120,6 +262,7 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
     lazy var collectView:UICollectionView = {
         let layout = EqualCellSpaceFlowLayout.init()
         layout.estimatedItemSize = CGSize(width: 64, height: 64)
+    
         layout.minimumLineSpacing=1
         layout.minimumInteritemSpacing=1
         let collectView = UICollectionView.init(frame:.zero, collectionViewLayout: layout)
@@ -188,46 +331,11 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
         }
     }
     override func layoutSubviews() {
-        
-        titleLabel.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(20)
-            make.centerY.equalToSuperview()
-        }
-        
-        rightImageView.snp.makeConstraints { (make) in
-            make.centerY.equalToSuperview()
-            make.right.equalToSuperview().offset(-16)
-            make.height.equalTo(22)
-            make.width.equalTo(22)
-        }
-        collectView.snp.remakeConstraints { (make) in
-            make.left.equalToSuperview().offset(140)
-            make.centerY.equalToSuperview()
-            make.right.equalTo(rightImageView.snp.left).offset(-20)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        lineView.snp.makeConstraints { (make) in
-            make.left.equalToSuperview().offset(20)
-            make.right.equalToSuperview().offset(-20)
-            make.bottom.equalToSuperview()
-            make.height.equalTo(0.5)
-
-        }
         if self.editStatu == "0"{
-            titleLabel.isUserInteractionEnabled = false
-            customField.isUserInteractionEnabled = true
-            textView.isUserInteractionEnabled = true
-
+            rightImageView.image = (UIImage(named: "feedback_form_ic_date"))
         }
         else if self.editStatu == "1"{
-            customField.isUserInteractionEnabled = false
-            textView.isUserInteractionEnabled = false
-            titleLabel.isUserInteractionEnabled = true
-
             if model?.isSelet == true{
-                
                 rightImageView.image = (UIImage(named: "feedback_form_ic_checkbox_selected"))
             }
             else{
@@ -238,44 +346,9 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
         }
         else {
             rightImageView.image = (UIImage(named: "feedback_form_ic_date"))
-            titleLabel.isUserInteractionEnabled = false
-            customField.isUserInteractionEnabled = false
-            textView.isUserInteractionEnabled = false
-
         }
-      
-        if model?.type == "0" || model?.type == "1"{
-            self.customField.isHidden = false
-            self.collectView.isHidden = true
-            self.textView.isHidden = true
-            customField.snp.makeConstraints { (make) in
-                make.left.equalToSuperview().offset(140)
-                make.centerY.equalToSuperview()
-                make.right.equalTo(rightImageView.snp.left).offset(-20).priority(99)
-                make.height.equalTo(40)
-            }
-        }
-        else if model?.type == "2" || model?.type == "3"{
-            self.customField.isHidden = true
-            self.textView.isHidden = true
-            self.collectView.isHidden = false
-        }
-        else if model?.type == "4"{
-            self.customField.isHidden = true
-            self.collectView.isHidden = true
-            self.textView.isHidden = false
-            textView.snp.makeConstraints { (make) in
-                make.left.equalToSuperview().offset(140)
-                make.right.equalTo(rightImageView.snp.left).offset(-20).priority(99)
-                make.top.equalToSuperview().offset(20)
-                make.bottom.equalToSuperview().offset(-20)
-            }
-        }
-        else {
-            self.customField.isHidden = true
-            self.textView.isHidden = true
-            self.collectView.isHidden = false
-
+        collectView.snp.updateConstraints { (make) in
+            make.height.equalTo(Int(self.model!.height))
         }
     }
     required init?(coder: NSCoder) {
@@ -456,3 +529,4 @@ extension UITextView {
 }
 
 
+    

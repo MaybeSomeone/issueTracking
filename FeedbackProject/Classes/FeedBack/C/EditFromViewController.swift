@@ -18,7 +18,6 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     private var templateModel = FeedbackModel()
     private var takingPicture = UIImagePickerController()
     private var IsSaveTemplate = Bool()
-//    var iSTemplate = Bool()
     var Complete : () -> Void = {}
     
     private lazy var setFormView : SetFormView = {
@@ -49,9 +48,10 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     
     private lazy var table : UITableView = {
         
-        let table:UITableView = UITableView(frame: CGRect(x: 0, y:0, width: CGFloat.screenWidth, height: CGFloat.screenHeight - AppConfig.mWindowSafebottom() - AppConfig.mWindowSafetop()), style:.plain)
+        let table:UITableView = UITableView(frame: CGRect(x: 0, y:0, width: CGFloat.screenWidth, height: CGFloat.screenHeight - 96 -  AppConfig.mWindowSafebottom() - AppConfig.mWindowSafetop()), style:.plain)
             table.separatorStyle = .none
-       
+        table.rowHeight = UITableView.automaticDimension
+        table.estimatedRowHeight = 300
          if #available(iOS 15.0, *) {
             table.sectionHeaderTopPadding = 0
          }
@@ -65,6 +65,9 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         configureAddNewIssueButton()
         creatdata()
         setupUI()
+//        self.table.reloadData()
+//        self.setFormView.setFromTabelView.reloadData()
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,10 +84,14 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     
     var model: FeedbackModel? {
         didSet {
+            
             for curmodel :FromChildTypeModel in model!.Child {
+                
                 self.dataModel.Child.append(curmodel.copy() as! FromChildTypeModel)
+
             }
             self.table.reloadData()
+
         }
     }
     var iSTemplate: Bool? {
@@ -132,12 +139,12 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             self.templateModel.title = String
             self.templateModel.ID = "100\(arc4random_uniform(100) + 1)"
             RealmManagerTool.shareManager().addObject(object: self.templateModel, .template)
-            if iSTemplate == false{
-                self.savedataModel()
-            }
-            else{
-                self.navigationController?.popViewController(animated: true)
-            }
+            if iSTemplate == true{
+                     self.navigationController?.popViewController(animated: true)
+                 }
+                 else{
+                     self.savedataModel()
+                 }
         }
         ///点击publish
         editFormFootView.publishBtnBlock = {() in
@@ -188,33 +195,73 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     
     ///创建编辑菜单数据源
     func creatdata(){
-        for i in 0 ..< 6{
-        editDataModel.Child.append(self.creatModel(i: i))
-        }
-        if model != nil {
-            for curmodel :FromChildTypeModel in model!.Child {
-                let model = curmodel.copy() as! FromChildTypeModel
-                self.editDataModel.Child[Int(model.type ?? "") ?? 0] = model
+            for i in 0 ..< 6{
+            editDataModel.Child.append(self.creatEditModel(i: i))
             }
-        }
-
+            
+            if model == nil {
+                for i in 0 ..< 4{
+                    dataModel.Child.append(self.creatModel(i: i))
+                }
+            }
     }
+    
     func creatModel( i : Int) -> FromChildTypeModel{
+        
         let model = FromChildTypeModel()
         switch i {
         case 0:
-            model.title = "Lable"
+            model.title = "title"
+            model.ID = "0"
+            model.type = "1"
+            model.isSelet = true
+            model.height = 64
+        case 1:
+            model.title = "description"
+            model.ID = "0"
+            model.type = "1"
+            model.isSelet = true
+            model.height = 64
+
+        case 2:
+            model.title = "author"
+            model.ID = "0"
+            model.type = "1"
+            model.isSelet = true
+            model.height = 64
+            
+        case 3:
+            model.title = "date-time"
+            model.type = "1"
+            model.ID = "0"
+            model.isSelet = true
+            model.height = 64
+        default:
+            model.title = "date-time"
+            model.type = "1"
+            model.ID = "0"
+            model.isSelet = true
+            model.height = 64
+        }
+        return model
+    }
+
+    func creatEditModel( i : Int) -> FromChildTypeModel{
+        let model = FromChildTypeModel()
+        switch i {
+        case 0:
+            model.title = "Label"
             model.type = "0"
             model.ID = "0"
             model.editStatu = "1"
-            model.isSelet = true
+            model.isSelet = false
             model.height = 64
         case 1:
             model.title = "Textbox"
             model.type = "1"
             model.ID = "1"
             model.height = 64
-            model.isSelet = true
+            model.isSelet = false
         case 2:
             model.title = "Single choice"
             model.type = "2"
@@ -247,7 +294,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             model.type = "5"
             model.ID = "5"
             model .isSelet = false
-            model.height = 104
+            model.height = 64
             let ImageModel = ImageChioceModel()
             model.ImageList.append(ImageModel)
                         
@@ -284,7 +331,6 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         
         if indexPath.row != dataModel.Child.count || tableView != table{
             let cell = tableView.dequeueReusableCell(withIdentifier: "EditTypeTabelViewCell", for: indexPath) as! EditTypeTabelViewCell
-            
             if tableView == table{
                 
                 let curModel = dataModel.Child[indexPath.row]
@@ -307,8 +353,13 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
 
             }
             cell.checkTitle = {model in
-                
                 self.setFormView.setFromTabelView.reloadData()
+            }
+            cell.upddateheight = {() in
+              self.table.beginUpdates()
+              self.table.endUpdates()
+              self.setFormView.setFromTabelView.beginUpdates()
+              self.setFormView.setFromTabelView.endUpdates()
             }
             return cell
         }
@@ -349,7 +400,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        if tableView == setFormView.setFromTabelView && indexPath.row != 0 && indexPath.row != 1{
+        if tableView == setFormView.setFromTabelView{
             
             let model = self.editDataModel.Child[indexPath.row]
             if model.chioceList.count == 1{
@@ -357,13 +408,14 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
                 return
             }
             model.isSelet = !(model.isSelet)
+            self.setFormView.setFromTabelView.reloadData()
         }
         
     }
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if tableView == table
         {
-            if indexPath.row == dataModel.Child.count || indexPath.row == 0 || indexPath.row == 1{
+            if indexPath.row == dataModel.Child.count{
                 return false
             }
                 return true
@@ -462,30 +514,6 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     }
    
     
-    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-        
-        if tableView == table
-        {
-            if indexPath.row == dataModel.Child.count{
-                return 108
-            }
-            else {
-            let editTypeModel = dataModel.Child[indexPath.row]
-                return CGFloat(editTypeModel.height)
-                 }
-            
-        }
-        else{
-            let editTypeModel = editDataModel.Child[indexPath.row]
-            return CGFloat(editTypeModel.height)
-
-
-        }
-        
-
-    }
-    
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
             return "Delete"
         }
@@ -507,15 +535,23 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     }
     
     //刷新templateModel和dataModel状态
-    func reloadtable(){
-        self.dataModel.Child.removeAll()
-        self.templateModel.Child.removeAll()
-        for curmodel in self.editDataModel.Child  where curmodel.isSelet==true{
-            self.dataModel.Child.append(curmodel)
-            self.templateModel.Child.append(curmodel.copy() as! FromChildTypeModel)
-        }
-        self.setFormView.setFromTabelView.reloadData()
-    }
+       func reloadtable(){
+           
+           for curmodel in self.editDataModel.Child  where curmodel.isSelet==true{
+               self.dataModel.Child.insert(curmodel, at:self.dataModel.Child.count - 2)
+           }
+           self.templateModel.Child.removeAll()
+           for curmodel in self.dataModel.Child{
+               self.templateModel.Child.append(curmodel.copy() as! FromChildTypeModel)
+           }
+
+           self.editDataModel.Child.removeAll()
+           for i in 0 ..< 6{
+           editDataModel.Child.append(self.creatEditModel(i: i))
+           }
+           self.setFormView.setFromTabelView.reloadData()
+       }
+       
     
     //隐藏编辑页面
     func hideshadeView(){
@@ -526,6 +562,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         }, completion: nil)
         reloadtable()        
         self.table.reloadData()
+        
     }
     //显示编辑页面
     func showshadeView(){
@@ -541,3 +578,26 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
 
 
 
+
+//extension EditFromViewController: UITextViewDelegate {
+//
+//    func textViewDidChange(_ textView: UITextView) {
+//        // 储存原textView的大小
+//        let oldSize = textView.frame.size
+//
+//        // 预设textView的大小，宽度设为固定宽度，高度设为CGFloat的最大值
+//        let presetSize = CGSize(width: textView.frame.size.width, height: CGFloat.greatestFiniteMagnitude)
+//
+//        // 重新计算textView的实际大小
+//        let newSize = textView.sizeThatFits(presetSize)
+//
+//        // 更新textView的大小
+//        textView.frame = CGRect(origin: CGPoint(x: textView.frame.origin.x, y: textView.frame.origin.y), size: CGSize(width: textView.frame.size.width, height: newSize.height))
+//
+//        // 当高度变化时，刷新tableview（beginUpdates和endUpdates必须成对使用）
+//        if newSize.height != oldSize.height {
+//            self.table.beginUpdates()
+//            self.table.endUpdates()
+//        }
+//    }
+//}

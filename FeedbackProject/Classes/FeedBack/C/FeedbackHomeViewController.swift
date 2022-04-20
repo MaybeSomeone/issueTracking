@@ -69,6 +69,16 @@ class FeedbackHomeViewController: WMPageController {
                         model.title = names[i]
                         model.descriptio = "This is a requirement"
                         model.createDate = Calendar.current.startOfDay(for: Date())
+                        if i == 1{
+                            for i in 0 ..< 8{
+                                model.Child.append((self?.creatEditModel(i: i))!)
+                            }
+                        }
+                        else{
+                            for i in 0 ..< 5{
+                                model.Child.append((self?.creatEvenModel(i: i))!)
+                            }
+                        }
                         templateView.dataArr.append(model)
                         //添加到本地数据库 后期可换成接口
                         RealmManagerTool.shareManager().addObject(object: model, .template)
@@ -101,8 +111,186 @@ class FeedbackHomeViewController: WMPageController {
         return menuView!
     }()
     
+    func creatEditModel( i : Int) -> FromChildTypeModel{
+        let model = FromChildTypeModel()
+        switch i {
+        case 0:
+            model.title = "title"
+            model.content = "project feedback survey"
+            model.type = "0"
+            model.ID = "0"
+            model.editStatu = "1"
+            model.isSelet = false
+            model.height = 64
+        case 1:
+            model.title = "description"
+            model.content = "we'd like to hear your feedback or suggestion on xx project"
+            model.type = "1"
+            model.ID = "1"
+            model.height = 64
+            model.isSelet = false
+        case 2:
+            model.title = "Question1：how do you like th project"
+            model.type = "2"
+            model.ID = "2"
+            model.height = 64
+            model.isSelet = false
+            let chioceModel = ChioceModel()
+            chioceModel.title = "1"
+            model.chioceList.append(chioceModel)
+            let chioceModel2  = ChioceModel ()
+            chioceModel2.title = "2"
+            model.chioceList.append(chioceModel2)
+            let chioceModel3  = ChioceModel ()
+            chioceModel3.title = "3"
+            model.chioceList.append(chioceModel3)
+            let chioceModel4  = ChioceModel ()
+            chioceModel4.title = "4"
+            model.chioceList.append(chioceModel4)
+            let chioceModel5  = ChioceModel ()
+            chioceModel5.title = "5"
+            model.chioceList.append(chioceModel5)
+            let chioceModel6  = ChioceModel ()
+            model.chioceList.append(chioceModel6)
+
+
+        case 3:
+            model.title = "Question2：which function you like use"
+            model.type = "3"
+            model.ID = "3"
+            model.height = 64
+            model.isSelet = false
+            let chioceModel = ChioceModel()
+            chioceModel.title = "function1"
+            model.chioceList.append(chioceModel)
+            let chioceModel2  = ChioceModel ()
+            chioceModel2.title = "function2"
+            model.chioceList.append(chioceModel2)
+            let chioceModel3  = ChioceModel ()
+            chioceModel3.title = "function3"
+            model.chioceList.append(chioceModel3)
+            let chioceModel4  = ChioceModel ()
+            model.chioceList.append(chioceModel4)
+
+
+          case 4:
+            model.title = "would your  share your suggestion"
+            model.type = "4"
+            model.ID = "4"
+            model.isSelet = false
+            model.height = 128
+            
+        case 5:
+            model.title = "author"
+            model.content = ""
+            model.type = "0"
+            model.ID = "0"
+            model.editStatu = "1"
+            model.isSelet = false
+            model.height = 64
+
+        case 6:
+            model.title = "due date"
+            model.type = "0"
+            model.ID = "0"
+            model.editStatu = "1"
+            model.isSelet = false
+            model.height = 64
+            let dfmatter = DateFormatter()
+            dfmatter.dateFormat = "yyyy-MM-dd"
+            let dateStr = dfmatter.string(from:  Calendar.current.startOfDay(for: Date()))
+            model.content = dateStr
+
+
+
+        default:
+            model.title = "Image"
+            model.type = "5"
+            model.ID = "5"
+            model .isSelet = false
+            model.height = 64
+            let ImageModel = ImageChioceModel()
+            model.ImageList.append(ImageModel)
+                        
+        }
+        return model
     
+    }
+
     
+    func creatEvenModel( i : Int) -> FromChildTypeModel{
+        let model = FromChildTypeModel()
+        switch i {
+        case 0:
+            model.title = "title "
+            model.content = "enterprise intend event"
+            model.type = "0"
+            model.ID = "0"
+            model.editStatu = "1"
+            model.isSelet = false
+            model.height = 64
+        case 1:
+            model.title = "description"
+            model.content = "we plan to organize on enterprise wide event in order to help intend employee well - being"
+            model.type = "1"
+            model.ID = "1"
+            model.height = 64
+            model.isSelet = false
+        case 2:
+            model.title = "please choose the activities below which you plan to attend"
+            model.type = "2"
+            model.ID = "2"
+            model.height = 64
+            model.isSelet = false
+            let chioceModel = ChioceModel()
+            chioceModel.title = "kick off session"
+            model.chioceList.append(chioceModel)
+            let chioceModel2  = ChioceModel ()
+            chioceModel2.title = "leadership"
+            model.chioceList.append(chioceModel2)
+            let chioceModel3  = ChioceModel ()
+            chioceModel3.title = "pause"
+            model.chioceList.append(chioceModel3)
+            let chioceModel4  = ChioceModel ()
+            chioceModel4.title = "wrap up"
+            model.chioceList.append(chioceModel4)
+
+        case 3:
+            model.title = "author"
+            model.content = ""
+            model.type = "0"
+            model.ID = "0"
+            model.editStatu = "1"
+            model.isSelet = false
+            model.height = 64
+
+        case 4:
+            model.title = "due date"
+            model.type = "0"
+            model.ID = "0"
+            model.editStatu = "1"
+            model.isSelet = false
+            model.height = 64
+            let dfmatter = DateFormatter()
+            dfmatter.dateFormat = "yyyy-MM-dd"
+            let dateStr = dfmatter.string(from:  Calendar.current.startOfDay(for: Date()))
+            model.content = dateStr
+
+
+
+        default:
+            model.title = "Image"
+            model.type = "5"
+            model.ID = "5"
+            model .isSelet = false
+            model.height = 64
+            let ImageModel = ImageChioceModel()
+            model.ImageList.append(ImageModel)
+                        
+        }
+        return model
+    
+    }
     init() {
         super.init(nibName: nil, bundle: nil)
         

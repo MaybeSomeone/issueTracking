@@ -17,6 +17,18 @@ class TextBoxTableView: UIView {
         }
     }
     
+    var content: String? {
+        didSet {
+            textview.text = content
+        }
+    }
+    
+    var enableEdit: Bool? {
+        didSet {
+//            textview.isEditable = enableEdit ?? true
+        }
+    }
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "苹方-简 常规体", size: 34)
@@ -24,12 +36,12 @@ class TextBoxTableView: UIView {
         return label
     }()
     
-    private lazy var textfield: UITextField = {
-        let textfield = UITextField()
-        textfield.font = UIFont(name: "苹方-简 常规体", size: 34)
-        textfield.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
-        textfield.placeholder = "XXXXXXX"
-        return textfield
+    private lazy var textview: UITextView = {
+        let textview = UITextView()
+        textview.font = UIFont(name: "苹方-简 常规体", size: 34)
+        textview.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
+        textview.placeholder = "XXXXXXX"
+        return textview
     }()
     
     override init(frame: CGRect) {
@@ -39,7 +51,7 @@ class TextBoxTableView: UIView {
     }
     
     func addSubviews() {
-        self.addSubviews([titleLabel, textfield])
+        self.addSubviews([titleLabel, textview])
         
         self.snp.makeConstraints { make in
             make.height.equalTo(100)
@@ -51,7 +63,7 @@ class TextBoxTableView: UIView {
             make.width.equalTo(100)
         }
         
-        textfield.snp.makeConstraints { make in
+        textview.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.leading.equalTo(titleLabel.snp.trailing).offset(20)
         }

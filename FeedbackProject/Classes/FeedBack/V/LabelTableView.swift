@@ -17,6 +17,18 @@ class LabelTableView: UIView {
         }
     }
     
+    var content: String? {
+        didSet {
+            textfield.text = content
+        }
+    }
+    
+    var enableEdit: Bool? {
+        didSet {
+//            textfield.isEnabled = enableEdit ?? true
+        }
+    }
+    
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "苹方-简 常规体", size: 34)

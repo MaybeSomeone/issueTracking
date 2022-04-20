@@ -11,6 +11,7 @@ import RealmSwift
 struct ComponentMode {
     var type: String
     var title: String
+    var content: String
     var dropDownList: Array<String>?
     var singleChoiceList: Array<String>?
     var multipleChoiceList: Array<String>?
@@ -60,15 +61,18 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         self.publish = publish;
         super.init(nibName: nil, bundle: nil)
         for child in feedBackMode.Child {
-            print("child.type \(String(describing: child.type))")
-            print("child.type \(String(describing: child.title))")
+            var content = ""
+            if (child.content != nil) {
+                content = child.content!
+            }
             switch child.type {
                 case "0":
-                    let labelComponent = ComponentMode(type: "Label", title: child.title ?? "Label", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                let labelComponent = ComponentMode(type: "Label", title: child.title ?? "Label", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(labelComponent)
+                print("labelComponent=======", labelComponent)
                 break
                 case "1":
-                    let textboxComponent = ComponentMode(type: "Textbox", title: child.title ?? "Textbox", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                let textboxComponent = ComponentMode(type: "Textbox", title: child.title ?? "Textbox", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(textboxComponent)
                 break
                 case "2":
@@ -76,7 +80,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                     for childModel in child.chioceList {
                         singleChoiceList.append(childModel.title ?? "")
                     }
-                    let singleComponent = ComponentMode(type: "Single", title: child.title ?? "SingleChoice", dropDownList: nil, singleChoiceList: singleChoiceList, multipleChoiceList: nil)
+                let singleComponent = ComponentMode(type: "Single", title: child.title ?? "SingleChoice", content: content, dropDownList: nil, singleChoiceList: singleChoiceList, multipleChoiceList: nil)
                     dataSource.append(singleComponent)
                     existSingle = true
                 break
@@ -87,17 +91,17 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                             multiChoiceList.append(childModel.title ?? "")
                         }
                     }
-                    let multiComponent = ComponentMode(type: "Multi", title: child.title ?? "Multi", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: multiChoiceList)
+                let multiComponent = ComponentMode(type: "Multi", title: child.title ?? "Multi", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: multiChoiceList)
                 
                     dataSource.append(multiComponent)
                     existMult = true
                 break
                 case "4":
-                    let richTextComponent = ComponentMode(type: "RichText", title: child.title ?? "RichText", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                let richTextComponent = ComponentMode(type: "RichText", title: child.title ?? "RichText", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(richTextComponent)
                 break
                 case "5":
-                    let imageComponent = ComponentMode(type: "Image", title: child.title ?? "Image", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                let imageComponent = ComponentMode(type: "Image", title: child.title ?? "Image", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(imageComponent)
                 break
                 default :
@@ -193,23 +197,30 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         
         switch dataOriginal.type {
             case "Label":
+            print("Label content value is == \(dataOriginal.content)")
             let labelComponent = LabelTableView()
             labelComponent.title = dataOriginal.title
+            labelComponent.content = dataOriginal.content
             cell.contentView.addSubview(labelComponent)
             labelComponent.snp.makeConstraints { make in
                 make.height.equalTo(100)
                 make.edges.equalToSuperview()
             }
-            
+            if (indexPath.row == 0) {
+                labelComponent.enableEdit = false
+            }
             case "Textbox":
+            print("Textbox content value is == \(dataOriginal.content)")
             let textBox = TextBoxTableView()
             textBox.title = dataOriginal.title
+            textBox.content = dataOriginal.content
             cell.contentView.addSubview(textBox)
             textBox.snp.makeConstraints { make in
                 make.height.equalTo(100)
                 make.edges.equalToSuperview()
             }
             case "DropDown":
+            print("DropDown content value is == \(dataOriginal.content)")
             let dropDown = DropDownTableView()
             dropDown.title = dataOriginal.title
             self.selectedShowLabel = dropDown.selectedShowLabel
@@ -223,6 +234,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                 make.edges.equalToSuperview()
             }
             case "Single":
+            print("Single content value is == \(dataOriginal.content)")
             let single = SingleChoiceTableView()
             single.dataSource = dataOriginal.singleChoiceList
             single.title = "Sex"
@@ -236,6 +248,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                 self.collection.singleSelected.append(selectedItem)
             }
             case "Multi":
+            print("Multi content value is == \(dataOriginal.content)")
             let multi = MultipleChoiceTableView()
             multi.title = "Advice"
             multi.dataSource = dataOriginal.multipleChoiceList

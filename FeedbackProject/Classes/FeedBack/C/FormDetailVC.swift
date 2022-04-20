@@ -167,6 +167,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
             btn.translatesAutoresizingMaskIntoConstraints = false
             cell.contentView.addSubview(btn)
             cell.separatorInset = UIEdgeInsets(top: 0,left: cell.bounds.size.width * 2,bottom: 0,right: 0 )
+            btn.addTarget(self, action: #selector(submitBtnClick), for: .touchUpInside)
             btn.setTitle("Submit", for: .normal)
             btn.snp.makeConstraints { make in
                 make.height.equalTo(50);
@@ -256,6 +257,33 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         
         
         return cell
+    }
+    
+    @objc func submitBtnClick() {
+        self.showAlter(title: "Warning", message: "Current testig mode cannot submit any data", sureTit: "Publish", cancelTit: "OK") {
+            self.showAlter(title: "Publish Action", message: "If set current form to publish mode, cannot edit anymore, sure??", sureTit: "Publish", cancelTit: "NO") {
+                self.saveFormModel(status: "3")
+            } cancelBlock: {
+                print("do nothing");
+            }
+
+        } cancelBlock: {
+            print("cancel block")
+        }
+    }
+    
+    func saveFormModel(status : String){
+        if self.feedBackMode.Child.count > 0{
+            self.feedBackMode.status = status
+            let loginModel = RealmManagerTool.shareManager().queryObjects(objectClass: LoginModel.self, .login).first
+            self.feedBackMode.author = loginModel?.username
+            self.feedBackMode.createDate = Calendar.current.startOfDay(for: Date())
+            self.feedBackMode.ID = "100\(arc4random_uniform(100) + 1)"
+            self.feedBackMode.title = self.feedBackMode.Child[0].title
+            self.feedBackMode.descriptio = self.feedBackMode.Child[1].title
+            RealmManagerTool.shareManager().addObject(object: self.feedBackMode, .feedback)
+            self.navigationController?.popToRootViewController(animated: true)
+        }
     }
     
     // MARK: - Image Picker Delegate

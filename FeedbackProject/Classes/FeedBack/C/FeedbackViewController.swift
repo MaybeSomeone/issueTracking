@@ -124,6 +124,7 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
             let editVC = EditFromViewController()
             editVC.model = selectedData
             editVC.titleLabel = "Edit Form"
+            editVC.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(editVC, animated: true)
         }
     }
@@ -146,6 +147,7 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
             newModel.ID = "000\(model.ID ?? "000")\(indexPath.row)"
             newModel.Child = model.Child
             let editForm = EditFromViewController()
+            editForm.hidesBottomBarWhenPushed = true
             editForm.model = newModel
             self.navigationController?.pushViewController(editForm, animated: true)
 //            RealmManagerTool.shareManager().addObject(object: newModel, .feedback)

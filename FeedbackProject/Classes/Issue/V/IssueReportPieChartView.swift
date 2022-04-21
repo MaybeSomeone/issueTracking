@@ -68,7 +68,7 @@ class IssueReportPieChartView: UIView {
         let set = PieChartDataSet(entries: entries, label: "")
         set.drawIconsEnabled = false
         set.sliceSpace = 2
-        set.drawValuesEnabled = true
+        set.drawValuesEnabled = false
         set.colors = ChartColorTemplates.vordiplom()
         + ChartColorTemplates.joyful()
         + ChartColorTemplates.colorful()

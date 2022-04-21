@@ -29,6 +29,7 @@ class FormReportViewController: BaseViewController,UITableViewDelegate,UITableVi
     private var multit : [String] = []
     private var singleseled : [String] = []
     private var multitseled : [String] = []
+    private var count : String = ""
 
     private lazy var table : UITableView = {
         
@@ -43,9 +44,7 @@ class FormReportViewController: BaseViewController,UITableViewDelegate,UITableVi
         didSet {
             
             let data = RealmManagerTool.shareManager().queryObjects(objectClass: CollectDataModel.self,filter: "FormId = '\(model!.ID ?? "")'",.publish)
-            print(model as Any)
-            print(data)
-
+            count = String(data.count)
             for dataModel in data.reversed() {
                 for str in dataModel.singleSelected{
                     singleseled.append(str)
@@ -101,7 +100,7 @@ class FormReportViewController: BaseViewController,UITableViewDelegate,UITableVi
         let cell = tableView.dequeueReusableCell(withIdentifier: "FormReportCell", for: indexPath) as! FormReportCell
         cell.backgroundColor = .clear
         if indexPath.row == 0{
-            cell.labelTitle = String(indexPath.row);
+            cell.labelTitle = String(count);
         }
         else{
             let model = dataArr[indexPath.row - 1]

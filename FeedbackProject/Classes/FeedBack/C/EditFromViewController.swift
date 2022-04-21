@@ -160,23 +160,13 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         }
         ///点击publish
         editFormFootView.publishBtnBlock = {() in
-<<<<<<< HEAD
-
             if self.dataModel.status == "2"{
                 let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
                 self.navigationController?.pushViewController(formDetailVC, animated: true)
             }
             else{
-                
                 self.saveFormModel(status: "2")
-
             }
-=======
-            self.saveFormModel(status: "3")
-
-            let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
-            self.navigationController?.pushViewController(formDetailVC, animated: true)
->>>>>>> 5199523 (detail modify)
         }
         ///点击save
         editFormFootView.saveBtnBlock = {() in

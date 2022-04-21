@@ -305,13 +305,14 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
+
         if model?.type == "5" && self.editStatu == "0"{
             self.addImageblock?()
         }
         else if model?.type != "5"{
             
-            if indexPath.row == indexPath.last {
+            if indexPath.row == (model?.chioceList.count)! - 1 {
+                
                 alertView.isHidden = false
                 self.alertView.updateContent(model: model!)
             }

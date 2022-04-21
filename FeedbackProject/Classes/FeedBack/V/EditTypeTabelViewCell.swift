@@ -20,7 +20,7 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
     lazy var titleLabel: UITextView = {
         let titleLabel = UITextView ()
         titleLabel.isUserInteractionEnabled = true
-        titleLabel.placeholder = "请输入"
+        titleLabel.placeholder = "XXX"
         titleLabel.font = UIFont.font_commonViewTitle
         titleLabel.textAlignment = .left
         titleLabel.isScrollEnabled = false
@@ -55,7 +55,7 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
         }
      lazy var customField: UITextView = {
         let field = UITextView ()
-        field.placeholder = "请输入"
+        field.placeholder = "XXX"
         field.isUserInteractionEnabled = true
         field.font = UIFont.font_commonViewTitle
         field.textAlignment = .left
@@ -68,7 +68,7 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
     private lazy var textView: UITextView = {
         let textView = UITextView ()
         textView.font = UIFont.font_commonViewTitle
-        textView.placeholderLabel.text = "请输入"
+        textView.placeholderLabel.text = "XXX"
         textView.isUserInteractionEnabled = true
         textView.textAlignment = .left
         textView.delegate = self

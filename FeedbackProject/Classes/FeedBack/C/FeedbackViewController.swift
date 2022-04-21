@@ -120,20 +120,28 @@ extension FeedbackViewController: UITableViewDataSource, UITableViewDelegate {
         }
         else{
             let selectedData = dataArr[indexPath.row]
-            let editVC = EditFromViewController()
-            editVC.model = selectedData
-            editVC.titleLabel = "Edit Form"
-            editVC.hidesBottomBarWhenPushed = true
-            editVC.Complete = {() in
-                let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
-                var dataArray: [FeedbackModel] = []
-                for model in data.reversed() {
-                    dataArray.append(model)
-                }
-                self.dataArr = dataArray
-                self.tableView.reloadData()
+            if selectedData?.status == "2"{
+                let formDetailVC = FormDetailVC(feedbackObj: selectedData!, publish: true)
+                formDetailVC.hidesBottomBarWhenPushed = true
+                self.navigationController?.pushViewController(formDetailVC, animated: true)
             }
-            navigationController?.pushViewController(editVC, animated: true)
+            else{
+                let editVC = EditFromViewController()
+                editVC.model = selectedData
+                editVC.titleLabel = "Edit Form"
+                editVC.hidesBottomBarWhenPushed = true
+                editVC.Complete = {() in
+                    let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
+                    var dataArray: [FeedbackModel] = []
+                    for model in data.reversed() {
+                        dataArray.append(model)
+                    }
+                    self.dataArr = dataArray
+                    self.tableView.reloadData()
+                }
+                navigationController?.pushViewController(editVC, animated: true)
+
+            }
         }
     }
     

@@ -116,6 +116,7 @@ class IssueReportLineChartView: UIView {
         dataDictionary = Dictionary(grouping: dataArr, by: { ($0?.value)!})
         
         let keys : Array = dataDictionary.sorted(by: {$0.0 < $1.0})
+        print(keys)
 
         let yVals1 = (0..<keys.count).map { (i) -> ChartDataEntry in
             var count = 0
@@ -193,8 +194,8 @@ class IssueReportLineChartView: UIView {
         
         linechartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:xArray)
         linechartView.xAxis.granularity = 1
-        linechartView.xAxis.axisMinimum = 0
-        linechartView.xAxis.axisMaximum = Double(xArray.count + 1)
+//        linechartView.xAxis.axisMinimum = 0
+//        linechartView.xAxis.axisMaximum = Double(xArray.count) + 1
 
         func GetWeekByDate(date:Date) ->String{
                 guard let calendar = NSCalendar(identifier: NSCalendar.Identifier.gregorian) else {

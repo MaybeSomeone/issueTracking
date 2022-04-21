@@ -28,17 +28,14 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
         return titleLabel
     }()
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        
-        if textView == titleLabel{
-            model?.title = textView.text
-        }
-        else{
-            model?.content = textView.text
-        }
-    }
-    
         func textViewDidChange(_ textView: UITextView) {
+            
+            if textView == titleLabel{
+                model?.title = textView.text
+            }
+            else{
+                model?.content = textView.text
+            }
             // 储存原textView的大小
             let oldSize = textView.frame.size
     
@@ -118,7 +115,7 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
             self.alertView.isHidden = true
             let chioceModel  = ChioceModel ()
             chioceModel.title = String
-            self.model?.chioceList.insert(chioceModel, at: 0)
+            self.model?.chioceList.insert(chioceModel, at: (self.model?.chioceList.count)! - 1)
             self.model?.height = Int(self.collectView.contentSize.height + 22 >=  44 ? self.collectView.contentSize.height + 22: 44)
             self.checkTitle(self.model!)
             self.layoutSubviews()
@@ -210,9 +207,9 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
                 self.collectView.isHidden = true
                 self.textView.isHidden = false
                 textView.snp.remakeConstraints { (make) in
-                    make.left.equalToSuperview().offset(140)
+                    make.left.equalToSuperview().offset(20)
                     make.right.equalTo(rightImageView.snp.left).offset(-20)
-                    make.top.equalToSuperview().offset(20)
+                    make.top.equalTo(titleLabel.snp.bottom)
                     make.height.equalTo(100)
                     make.bottom.equalToSuperview().offset(-20)
                 }
@@ -285,14 +282,8 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
             return model?.ImageList.count ?? 0
         }
         else{
-            if self.editStatu == "1" {
-                return model?.chioceList.count ?? 0
+            return model?.chioceList.count ?? 0
 
-            }
-            else{
-                return  (model?.chioceList.count)! - 1
-
-            }
         }
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -318,8 +309,9 @@ class EditTypeTabelViewCell: UITableViewCell, UICollectionViewDelegate,UICollect
         if model?.type == "5" && self.editStatu == "0"{
             self.addImageblock?()
         }
-        else if model?.type != "5" && self.editStatu == "1"{
-            if indexPath.row == indexPath.last && model?.chioceList[indexPath.last ?? 0].isEdit == true {
+        else if model?.type != "5"{
+            
+            if indexPath.row == indexPath.last {
                 alertView.isHidden = false
                 self.alertView.updateContent(model: model!)
             }

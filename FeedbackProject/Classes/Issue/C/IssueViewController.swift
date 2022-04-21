@@ -136,7 +136,7 @@ class IssueViewController: BaseViewController {
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*60))
+                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*30))
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"
@@ -156,7 +156,7 @@ class IssueViewController: BaseViewController {
                 model.assgin = "INFO"
                 model.status = "0"
                 model.author = "Currie"
-                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*60))
+                model.createDate = date.addingTimeInterval(TimeInterval(-i*2*24*60*30))
                 model.descriptio = "This is a requirement"
                 model.category = "0"
                 model.priority = "0"

@@ -47,6 +47,8 @@ class AddTemplateTabelViewCell: UITableViewCell {
             make.top.equalToSuperview().offset(21)
             make.height.equalTo(44)
             make.right.equalToSuperview().offset(-20)
+            make.bottom.equalToSuperview().offset(-21)
+
         }
         
     }

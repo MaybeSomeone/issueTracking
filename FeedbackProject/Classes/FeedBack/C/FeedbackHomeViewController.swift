@@ -69,7 +69,7 @@ class FeedbackHomeViewController: WMPageController {
                         model.title = names[i]
                         model.descriptio = "This is a requirement"
                         model.createDate = Calendar.current.startOfDay(for: Date())
-                        if i == 1{
+                        if i == 0{
                             for i in 0 ..< 8{
                                 model.Child.append((self?.creatEditModel(i: i))!)
                             }
@@ -90,10 +90,20 @@ class FeedbackHomeViewController: WMPageController {
                     
                     print("跳转ByTemplateView=========================\(templateModel)")
                     
-//                    let templateManageVC = TemplateManageVC()
                     let editFormVC = EditFromViewController()
                     editFormVC.model = templateModel
-//                    templateManageVC.hidesBottomBarWhenPushed = true
+                    editFormVC.hidesBottomBarWhenPushed = true
+                    editFormVC.iSTemplate = "1"
+                    editFormVC.titleLabel = "Create Form"
+                    editFormVC.Complete = {() in
+                        let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
+                        var dataArray: [FeedbackModel] = []
+                        for model in data.reversed() {
+                            dataArray.append(model)
+                        }
+                        self?.feedbackVC.dataArr = dataArray
+                        self?.feedbackVC.tableView.reloadData()
+                    }
                     weakself.navigationController?.pushViewController(editFormVC, animated: true)
                     
                 }
@@ -256,6 +266,9 @@ class FeedbackHomeViewController: WMPageController {
             let chioceModel4  = ChioceModel ()
             chioceModel4.title = "wrap up"
             model.chioceList.append(chioceModel4)
+            let chioceModel5  = ChioceModel ()
+            model.chioceList.append(chioceModel5)
+
 
         case 3:
             model.title = "author"

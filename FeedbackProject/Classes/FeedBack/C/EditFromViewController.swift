@@ -84,7 +84,8 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     
     var model: FeedbackModel? {
         didSet {
-            
+            self.dataModel.ID = model?.ID
+            self.dataModel.status = model?.status
             for curmodel :FromChildTypeModel in model!.Child {
                 
                 self.dataModel.Child.append(curmodel.copy() as! FromChildTypeModel)
@@ -94,7 +95,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
 
         }
     }
-    var iSTemplate: Bool? {
+    var iSTemplate: String? {
         didSet {
             self.editFormFootView.PublishBtn.isHidden = true
             self.editFormFootView.TestingBtn.isHidden = true
@@ -139,22 +140,40 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             self.templateModel.title = String
             self.templateModel.ID = "100\(arc4random_uniform(100) + 1)"
             RealmManagerTool.shareManager().addObject(object: self.templateModel, .template)
-            if iSTemplate == true{
-                     self.navigationController?.popViewController(animated: true)
-                 }
-                 else{
-                     self.savedataModel()
-                 }
+            if iSTemplate == nil{
+            self.navigationController?.popViewController(animated: true)
+            }
+            else{
+                RealmManagerTool.shareManager().addObject(object: self.templateModel, .template)
+               self.savedataModel()
+                if self.dataModel.status == "2"{
+                let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
+                self.navigationController?.pushViewController(formDetailVC, animated: true)
+                }
+                if self.dataModel.status == "1"{
+                  self.navigationController?.popViewController(animated: true)
+                }
+
+
+            }
         }
         ///点击publish
         editFormFootView.publishBtnBlock = {() in
-            let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
-            self.navigationController?.pushViewController(formDetailVC, animated: true)
-            self.saveFormModel(status: "3")
+
+            if self.dataModel.status == "2"{
+                let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
+                self.navigationController?.pushViewController(formDetailVC, animated: true)
+            }
+            else{
+                
+                self.saveFormModel(status: "2")
+
+            }
         }
         ///点击save
         editFormFootView.saveBtnBlock = {() in
-            self.saveFormModel(status: "2")
+            self.saveFormModel(status: "1")
+            
         }
         ///点击testing
         editFormFootView.testingBtnBlock = {() in
@@ -168,11 +187,18 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     func saveFormModel(status : String){
         if self.dataModel.Child.count > 0{
             self.dataModel.status = status
-            if self.IsSaveTemplate == true || iSTemplate == true{
+            if self.IsSaveTemplate == true || iSTemplate == "2"{
                 self.alertView.isHidden = false
             }
             else{
                 self.savedataModel()
+                if status == "2"{
+                let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
+                self.navigationController?.pushViewController(formDetailVC, animated: true)
+                }
+                if status == "1"{
+                  self.navigationController?.popViewController(animated: true)
+                }
             }
         }
         else{
@@ -182,10 +208,12 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
     
     ///组合feekModel
     func savedataModel(){
-        let loginModel = RealmManagerTool.shareManager().queryObjects(objectClass: LoginModel.self, .login).first
-        self.dataModel.author = loginModel?.username
+        print(self.dataModel.Child[self.dataModel.Child.count-2].title as Any? as Any)
+        if self.dataModel.Child[self.dataModel.Child.count-2].title == "author"{
+            self.dataModel.author = self.dataModel.Child[self.dataModel.Child.count-2].content
+        }
         self.dataModel.createDate = Calendar.current.startOfDay(for: Date())
-        self.dataModel.ID = "100\(arc4random_uniform(100) + 1)"
+        self.dataModel.ID = (self.dataModel.ID != nil) ?self.dataModel.ID :"100\(arc4random_uniform(100) + 1)"
         self.dataModel.title = self.dataModel.Child[0].title
         self.dataModel.descriptio = self.dataModel.Child[1].title
         RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
@@ -231,13 +259,13 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             model.height = 64
             
         case 3:
-            model.title = "date-time"
+            model.title = "due date"
             model.type = "1"
             model.ID = "0"
             model.isSelet = true
             model.height = 64
         default:
-            model.title = "date-time"
+            model.title = "due date"
             model.type = "1"
             model.ID = "0"
             model.isSelet = true
@@ -354,6 +382,8 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             }
             cell.checkTitle = {model in
                 self.setFormView.setFromTabelView.reloadData()
+                self.table.reloadData()
+
             }
             cell.upddateheight = {() in
               self.table.beginUpdates()
@@ -363,7 +393,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
             }
             return cell
         }
-        if iSTemplate == true{
+        if iSTemplate != nil{
             let cell = tableView.dequeueReusableCell(withIdentifier: "AddTemplateTabelViewCell", for: indexPath) as! AddTemplateTabelViewCell
             cell.backgroundColor = .clear
             cell.block = {() in

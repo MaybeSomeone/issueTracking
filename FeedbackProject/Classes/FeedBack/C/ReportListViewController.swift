@@ -14,6 +14,11 @@ class ReportListViewController: BaseViewController {
         let dataArr: [FeedbackModel?] = []
         return dataArr
     }()
+    var condataArr: [CollectDataModel?] = {
+        let dataArr: [CollectDataModel?] = []
+        return dataArr
+    }()
+
     ///tabbleview
     lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
@@ -32,12 +37,19 @@ class ReportListViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        
         view.addSubview(tableView)
         
-        loadFeedbackModelData()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.dataArr .removeAll()
+        loadFeedbackModelData()
+        let data = RealmManagerTool.shareManager().queryObjects(objectClass: CollectDataModel.self, .publish)
+        for model in data.reversed() {
+            print(model)
+            condataArr.append(model)
+        }
+    }
     func loadFeedbackModelData () {
         
         let data = RealmManagerTool.shareManager().queryObjects(objectClass: FeedbackModel.self, .feedback)
@@ -81,7 +93,10 @@ extension ReportListViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedData = dataArr[indexPath.row]
+        
         let formReportVC = FormReportViewController()
+        formReportVC.hidesBottomBarWhenPushed = true
+        formReportVC.model = selectedData
         navigationController?.pushViewController(formReportVC, animated: true)
     }
     

@@ -209,8 +209,9 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         if self.dataModel.Child[self.dataModel.Child.count-2].title == "author"{
             self.dataModel.author = self.dataModel.Child[self.dataModel.Child.count-2].content
         }
+        
         self.dataModel.createDate = Calendar.current.startOfDay(for: Date())
-        self.dataModel.ID = (self.dataModel.ID != nil) ?self.dataModel.ID :"100\(arc4random_uniform(100) + 1)"
+        self.dataModel.ID = (self.dataModel.ID != nil && iSTemplate == nil) ?self.dataModel.ID :"100\(arc4random_uniform(100) + 1)"
         self.dataModel.title = self.dataModel.Child[0].title
         self.dataModel.descriptio = self.dataModel.Child[1].title
         RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)

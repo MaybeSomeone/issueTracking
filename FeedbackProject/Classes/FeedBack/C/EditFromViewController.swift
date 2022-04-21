@@ -8,6 +8,7 @@
 import UIKit
 import SwiftUI
 import Photos
+import RealmSwift
 
 class EditFromViewController: BaseViewController,UITableViewDelegate,UITableViewDataSource,UIImagePickerControllerDelegate & UINavigationControllerDelegate{
 
@@ -159,6 +160,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         }
         ///点击publish
         editFormFootView.publishBtnBlock = {() in
+<<<<<<< HEAD
 
             if self.dataModel.status == "2"{
                 let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
@@ -169,6 +171,12 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
                 self.saveFormModel(status: "2")
 
             }
+=======
+            self.saveFormModel(status: "3")
+
+            let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: true)
+            self.navigationController?.pushViewController(formDetailVC, animated: true)
+>>>>>>> 5199523 (detail modify)
         }
         ///点击save
         editFormFootView.saveBtnBlock = {() in
@@ -178,7 +186,6 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         ///点击testing
         editFormFootView.testingBtnBlock = {() in
 //            self.saveFormModel(status: "1")
-            print("test:111111111111111")
             let formDetailVC = FormDetailVC(feedbackObj: self.dataModel, publish: false)
             self.navigationController?.pushViewController(formDetailVC, animated: false)
         }
@@ -217,6 +224,7 @@ class EditFromViewController: BaseViewController,UITableViewDelegate,UITableView
         self.dataModel.title = self.dataModel.Child[0].title
         self.dataModel.descriptio = self.dataModel.Child[1].title
         RealmManagerTool.shareManager().addObject(object: self.dataModel, .feedback)
+        
         self.Complete()
 //        self.navigationController?.popViewController(animated: true)
     }

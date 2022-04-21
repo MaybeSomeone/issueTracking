@@ -57,22 +57,23 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     init(feedbackObj: FeedbackModel, publish: Bool) {
+        print("feedbackObj === \(feedbackObj)")
         self.feedBackMode = feedbackObj
         self.publish = publish;
         super.init(nibName: nil, bundle: nil)
         for child in feedBackMode.Child {
-            var content = ""
-            if (child.content != nil) {
-                content = child.content!
-            }
+            print("child = \(child)")
             switch child.type {
                 case "0":
-                let labelComponent = ComponentMode(type: "Label", title: child.title ?? "Label", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                print("child.content ==== \(child)")
+
+                let labelComponent = ComponentMode(type: "Label", title: child.title ?? "Label", content: (child.content != nil) ? child.content! : "", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(labelComponent)
-                print("labelComponent=======", labelComponent)
+                print("labelComponent ==== \(labelComponent)")
+
                 break
                 case "1":
-                let textboxComponent = ComponentMode(type: "Textbox", title: child.title ?? "Textbox", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                let textboxComponent = ComponentMode(type: "Textbox", title: child.title ?? "Textbox", content: child.content ?? "", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(textboxComponent)
                 break
                 case "2":
@@ -80,7 +81,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                     for childModel in child.chioceList {
                         singleChoiceList.append(childModel.title ?? "")
                     }
-                let singleComponent = ComponentMode(type: "Single", title: child.title ?? "SingleChoice", content: content, dropDownList: nil, singleChoiceList: singleChoiceList, multipleChoiceList: nil)
+                let singleComponent = ComponentMode(type: "Single", title: child.title ?? "SingleChoice", content: child.content ?? "", dropDownList: nil, singleChoiceList: singleChoiceList, multipleChoiceList: nil)
                     dataSource.append(singleComponent)
                     existSingle = true
                 break
@@ -91,17 +92,17 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
                             multiChoiceList.append(childModel.title ?? "")
                         }
                     }
-                let multiComponent = ComponentMode(type: "Multi", title: child.title ?? "Multi", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: multiChoiceList)
+                let multiComponent = ComponentMode(type: "Multi", title: child.title ?? "Multi", content: child.content ?? "", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: multiChoiceList)
                 
                     dataSource.append(multiComponent)
                     existMult = true
                 break
                 case "4":
-                let richTextComponent = ComponentMode(type: "RichText", title: child.title ?? "RichText", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                let richTextComponent = ComponentMode(type: "RichText", title: child.title ?? "RichText", content: child.content ?? "", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(richTextComponent)
                 break
                 case "5":
-                let imageComponent = ComponentMode(type: "Image", title: child.title ?? "Image", content: content, dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
+                let imageComponent = ComponentMode(type: "Image", title: child.title ?? "Image", content: child.content ?? "", dropDownList: nil, singleChoiceList: nil, multipleChoiceList: nil)
                     dataSource.append(imageComponent)
                 break
                 default :
@@ -139,7 +140,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         tableView.snp.makeConstraints { make in
             make.edges.equalTo(self.view)
         }
-    }
+}
     
     // MARK: - UITableView Delegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -156,13 +157,13 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         case "Label":
             return 70
         case "Textbox":
-            return 120
+            return 200
         case "DropDown":
             return 70
         case "Single":
-            return CGFloat(dataOriginal.singleChoiceList!.count / 2 * 70)
+            return CGFloat(dataOriginal.singleChoiceList!.count * 50 + 20)
         case "Multi":
-            return CGFloat(dataOriginal.multipleChoiceList!.count / 2 * 70)
+            return CGFloat(dataOriginal.multipleChoiceList!.count * 50 + 20)
         case "RichText":
             return 140
         case "Image":
@@ -197,7 +198,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
         
         switch dataOriginal.type {
             case "Label":
-            print("Label content value is == \(dataOriginal.content)")
+            print("Label content value is == \(dataOriginal)")
             let labelComponent = LabelTableView()
             labelComponent.title = dataOriginal.title
             labelComponent.content = dataOriginal.content
@@ -216,9 +217,12 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
             textBox.content = dataOriginal.content
             cell.contentView.addSubview(textBox)
             textBox.snp.makeConstraints { make in
-                make.height.equalTo(100)
+                make.bottom.equalTo(cell.contentView.snp.bottom)
                 make.edges.equalToSuperview()
             }
+            
+       
+            
             case "DropDown":
             print("DropDown content value is == \(dataOriginal.content)")
             let dropDown = DropDownTableView()
@@ -240,7 +244,7 @@ class FormDetailVC: BaseViewController, UITableViewDelegate, UITableViewDataSour
             single.title = "Sex"
             cell.contentView.addSubview(single)
             single.snp.makeConstraints { make in
-                make.height.equalTo(100)
+                make.bottom.equalTo(cell.contentView.snp.bottom)
                 make.edges.equalToSuperview()
             }
             single.selected = {(selectedItem: String) -> Void in

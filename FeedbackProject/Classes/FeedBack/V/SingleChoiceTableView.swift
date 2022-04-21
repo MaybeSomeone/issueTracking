@@ -47,9 +47,9 @@ class SingleChoiceTableView: UIView {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.top.equalTo(self).offset(20)
             make.leading.equalTo(self).offset(20)
-            make.width.equalTo(100)
+            make.trailing.equalTo(self).offset(20)
         }
         
         var i = 0
@@ -63,13 +63,11 @@ class SingleChoiceTableView: UIView {
                 self.addSubviews([label, selectedButton])
                 
                
-                let topConstraint = (i / 2) * 70 + 35 - 10
+                let topConstraint = i * 60 + 20
                 
-                let leadingOffSet = (i % 2) * 120 + 10
                 label.snp.makeConstraints { make in
-                    make.top.equalTo(self).offset(topConstraint)
-                    make.leading.equalTo(titleLabel.snp.trailing).offset(leadingOffSet)
-                    make.width.equalTo(60)
+                    make.top.equalTo(titleLabel.snp.bottom).offset(topConstraint)
+                    make.leading.equalTo(self).offset(60)
                 }
                 
                 selectedButton.snp.makeConstraints { make in
@@ -77,6 +75,7 @@ class SingleChoiceTableView: UIView {
                     make.centerY.equalTo(label)
                     make.width.height.equalTo(20)
                 }
+                
                 
 //                selectedButton.layer.cornerRadius = 10
 //                selectedButton.layer.borderWidth = 2
@@ -86,6 +85,10 @@ class SingleChoiceTableView: UIView {
                 selectedButton.setImage(UIImage(named: "feedback_form_ic_checkbox"), for: .normal)
                 i += 1
             }
+        }
+        
+        self.snp.makeConstraints { make in
+            make.height.equalTo(60 * i  + 20)
         }
     }
     

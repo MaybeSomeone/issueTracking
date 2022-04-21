@@ -19,13 +19,13 @@ class LabelTableView: UIView {
     
     var content: String? {
         didSet {
-            textfield.text = content
+            textfield.text = content ?? "";
         }
     }
     
     var enableEdit: Bool? {
         didSet {
-//            textfield.isEnabled = enableEdit ?? true
+            textfield.isEnabled = enableEdit ?? true
         }
     }
     
@@ -56,27 +56,30 @@ class LabelTableView: UIView {
             make.centerY.equalTo(self)
             make.leading.equalTo(self).offset(20)
             make.width.equalTo(100)
+            make.height.equalTo(40)
         }
         
         textfield.snp.makeConstraints { make in
             make.centerY.equalTo(self)
             make.leading.equalTo(titleLabel.snp.trailing).offset(20)
+            make.height.equalTo(80)
         }
-        
-        
     }
     
     @objc func addTemplateButtonClick() {
-        print("test1111")
         if let _ = clickAddTemplateBlock {
             clickAddTemplateBlock()
         }
-        print("test1111")
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    func textHeight (text: String, fontSize: CGFloat, width: CGFloat) -> CGFloat {
+        return text.boundingRect(with:CGSize(width: width, height:CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [.font:UIFont.systemFont(ofSize: fontSize)], context:nil).size.height+5
+    }
+
 
 }
 

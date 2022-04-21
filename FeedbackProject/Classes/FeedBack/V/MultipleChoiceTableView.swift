@@ -48,9 +48,9 @@ class MultipleChoiceTableView: UIView {
             make.height.equalTo(70 * (dataSource?.count ?? 2) / 2)        }
         
         titleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.top.equalTo(self).offset(20)
             make.leading.equalTo(self).offset(20)
-            make.width.equalTo(100)
+            make.trailing.equalTo(self).offset(20)
         }
         
         var i = 0
@@ -65,13 +65,11 @@ class MultipleChoiceTableView: UIView {
                 let selectedButton = UIButton(type: .custom)
                 self.addSubviews([label, selectedButton])
 
-                let topConstraint = (i / 2) * 70 + 35 - 10
+                let topConstraint = i * 60 + 20
                 
-                let leadingOffSet = (i % 2) * 120 + 10
                 label.snp.makeConstraints { make in
-                    make.top.equalTo(self).offset(topConstraint)
-                    make.leading.equalTo(titleLabel.snp.trailing).offset(leadingOffSet)
-                    make.width.equalTo(60)
+                    make.top.equalTo(titleLabel.snp.bottom).offset(topConstraint)
+                    make.leading.equalTo(self).offset(60)
                 }
                 
                 selectedButton.snp.makeConstraints { make in

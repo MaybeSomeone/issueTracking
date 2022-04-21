@@ -19,7 +19,7 @@ class TextBoxTableView: UIView {
     
     var content: String? {
         didSet {
-            textview.text = content
+            textview.text = content!
         }
     }
     
@@ -31,56 +31,60 @@ class TextBoxTableView: UIView {
     
     lazy var titleLabel: UILabel = {
         let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont(name: "苹方-简 常规体", size: 34)
         label.textColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 1)
         return label
     }()
     
-    private lazy var textview: UITextView = {
-        let textview = UITextView()
-        textview.font = UIFont(name: "苹方-简 常规体", size: 34)
-        textview.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
-        textview.placeholder = "XXXXXXX"
-        return textview
-    }()
+    var textview: UITextView = UITextView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        textview.translatesAutoresizingMaskIntoConstraints = false
+        textview.font = UIFont(name: "苹方-简 常规体", size: 34)
+        textview.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
+        textview.placeholder = "XXXXXXX"
         self.translatesAutoresizingMaskIntoConstraints = false
         addSubviews()
     }
     
     func addSubviews() {
+        textview.translatesAutoresizingMaskIntoConstraints = false
         self.addSubviews([titleLabel, textview])
-        
-        self.snp.makeConstraints { make in
-            make.height.equalTo(100)
-        }
-        
+        let componentWidth = CGFloat.screenWidth - 40
+
+        titleLabel.numberOfLines = 3
+        titleLabel.backgroundColor = UIColor.blue
         titleLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
+            make.top.equalTo(self).offset(15)
             make.leading.equalTo(self).offset(20)
-            make.width.equalTo(100)
+            make.width.equalTo(componentWidth)
+            make.height.equalTo(50)
         }
         
         textview.snp.makeConstraints { make in
-            make.centerY.equalTo(self)
-            make.leading.equalTo(titleLabel.snp.trailing).offset(20)
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.leading.equalTo(self).offset(20)
+            make.width.equalTo(componentWidth)
+            make.height.equalTo(110)
         }
-        
-        
+        textview.backgroundColor = UIColor.red
     }
     
     @objc func addTemplateButtonClick() {
-        print("test1111")
         if let _ = clickAddTemplateBlock {
             clickAddTemplateBlock()
         }
-        print("test1111")
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    
+    func textHeight (text: String, fontSize: CGFloat, width: CGFloat) -> CGFloat {
+        return text.boundingRect(with:CGSize(width: width, height:CGFloat(MAXFLOAT)), options: .usesLineFragmentOrigin, attributes: [.font:UIFont.systemFont(ofSize: fontSize)], context:nil).size.height+5
     }
 
 }

@@ -12,7 +12,7 @@ class IssueViewController: BaseViewController {
     var menuArr = [["Category","Finance","Sales","Human Resources"],
                    ["Priority","Critical","High","Medium","Low"],
                    ["Issue type","Feature","Task","Bug"],
-                   ["Statu","Open","In Progress","Resolved","Closed"],
+                   ["Statu","Open","Resolved","Closed"],
                    ["More"]]
     
     private lazy var dropDownMenu: CustomDropDownMenu = {

@@ -55,7 +55,7 @@ class TextBoxTableView: UIView {
         let componentWidth = CGFloat.screenWidth - 40
 
         titleLabel.numberOfLines = 3
-        titleLabel.backgroundColor = UIColor.blue
+        titleLabel.backgroundColor = UIColor.white
         titleLabel.snp.makeConstraints { make in
             make.top.equalTo(self).offset(15)
             make.leading.equalTo(self).offset(20)
@@ -69,7 +69,7 @@ class TextBoxTableView: UIView {
             make.width.equalTo(componentWidth)
             make.height.equalTo(110)
         }
-        textview.backgroundColor = UIColor.red
+        textview.backgroundColor = UIColor.white
     }
     
     @objc func addTemplateButtonClick() {

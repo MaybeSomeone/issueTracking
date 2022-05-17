@@ -319,6 +319,10 @@ class FeedbackHomeViewController: WMPageController {
         self.menuViewLayoutMode = .center
         self.menuViewStyle = .line
         self.scrollEnable = false
+        
+        if LoginAdminPower.isAdmin() {
+            self.progressColor = .clear
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -360,14 +364,30 @@ extension FeedbackHomeViewController {
     }
     
     override func numbersOfChildControllers(in inpageController: WMPageController) -> Int {
+        if LoginAdminPower.isAdmin() {
+            return 1
+        }
         return 2
     }
     
     override func pageController(_ pageController: WMPageController, titleAt index: Int) -> String {
+        if LoginAdminPower.isAdmin() {
+            return ["Feedback"][index]
+        }
         return ["Feedback","Report"][index]
     }
     
     override func pageController(_ pageController: WMPageController, viewControllerAt index: Int) -> UIViewController {
+        
+        if LoginAdminPower.isAdmin() {
+            switch index {
+            case 0 :
+                return feedbackVC
+            default:
+                return FeedbackViewController()
+            }
+        }
+        
         switch index {
         case 0 :
             return feedbackVC

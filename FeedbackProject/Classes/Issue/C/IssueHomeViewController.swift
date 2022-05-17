@@ -25,6 +25,9 @@ class IssueHomeViewController: WMPageController {
         self.menuViewLayoutMode = .center
         self.menuViewStyle = .line
         self.scrollEnable = false
+        if LoginAdminPower.isAdmin() {
+            self.progressColor = .clear
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -40,6 +43,8 @@ class IssueHomeViewController: WMPageController {
         navigationItem.leftBarButtonItem = barButtonItem
         
         configureAddNewIssueButton()
+        
+        print("=============================",LoginAdminPower.isAdmin())
     }
     
     func configureAddNewIssueButton() {
@@ -77,14 +82,30 @@ extension IssueHomeViewController {
     }
     
     override func numbersOfChildControllers(in inpageController: WMPageController) -> Int {
+        if LoginAdminPower.isAdmin() {
+            return 1
+        }
         return 2
     }
     
     override func pageController(_ pageController: WMPageController, titleAt index: Int) -> String {
+        if LoginAdminPower.isAdmin() {
+            return ["Issue traking"][index]
+        }
         return ["Issue traking","Report"][index]
     }
     
     override func pageController(_ pageController: WMPageController, viewControllerAt index: Int) -> UIViewController {
+        
+        if LoginAdminPower.isAdmin() {
+            switch index {
+            case 0 :
+                return issueVC
+            default:
+                return IssueViewController()
+            }
+        }
+        
         switch index {
         case 0 :
             return issueVC

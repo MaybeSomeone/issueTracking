@@ -32,6 +32,7 @@
 		646B51BC27D75EA100FB923B /* MLMenuItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 646B51B527D75EA100FB923B /* MLMenuItem.m */; };
 		646B51BD27D75EA100FB923B /* MLMenuCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 646B51B627D75EA100FB923B /* MLMenuCell.m */; };
 		646B51BE27D75EA100FB923B /* MLMenuView.m in Sources */ = {isa = PBXBuildFile; fileRef = 646B51B727D75EA100FB923B /* MLMenuView.m */; };
+		6495552C2833778600A78C6D /* LoginAdminPower.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6495552B2833778600A78C6D /* LoginAdminPower.swift */; };
 		64B69C2827C47F1000EDD866 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64B69C2727C47F1000EDD866 /* AppDelegate.swift */; };
 		64B69C2F27C47F1000EDD866 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 64B69C2D27C47F1000EDD866 /* Main.storyboard */; };
 		64B69C3127C47F1100EDD866 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64B69C3027C47F1100EDD866 /* Assets.xcassets */; };
@@ -114,6 +115,7 @@
 		646B51B927D75EA100FB923B /* MLMenuCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMenuCell.h; sourceTree = "<group>"; };
 		646B51BA27D75EA100FB923B /* MLMenuItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMenuItem.h; sourceTree = "<group>"; };
 		646B51BB27D75EA100FB923B /* MLMenuView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MLMenuView.h; sourceTree = "<group>"; };
+		6495552B2833778600A78C6D /* LoginAdminPower.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginAdminPower.swift; sourceTree = "<group>"; };
 		64B69C2427C47F1000EDD866 /* FeedbackProject.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedbackProject.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64B69C2727C47F1000EDD866 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		64B69C2E27C47F1000EDD866 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 			isa = PBXGroup;
 			children = (
 				64B69C7A27C487D300EDD866 /* AppConfig.swift */,
+				6495552B2833778600A78C6D /* LoginAdminPower.swift */,
 			);
 			path = Config;
 			sourceTree = "<group>";
@@ -673,6 +676,7 @@
 				646B51B127D7477500FB923B /* IssueHomeViewController.swift in Sources */,
 				BF4EC843280FE1C2001C367A /* CollectDataModel.swift in Sources */,
 				6421C92927CC5890009AC9D1 /* IssueDetailViewController.swift in Sources */,
+				6495552C2833778600A78C6D /* LoginAdminPower.swift in Sources */,
 				64BE5FB327E817710050059D /* TextBoxTableView.swift in Sources */,
 				64B69C7827C4844000EDD866 /* RegisterViewController.swift in Sources */,
 				64BE5FB527E817710050059D /* LabelTableView.swift in Sources */,

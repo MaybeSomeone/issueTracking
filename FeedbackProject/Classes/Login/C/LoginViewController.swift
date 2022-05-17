@@ -132,15 +132,26 @@ class LoginViewController: BaseViewController {
                 //对比注册数据库
                 if model.username == usernameField.text && model.password == passwordField.text {
                     //保存登录信息
-                    let loginModel = LoginModel()
-                    loginModel.username = usernameField.text
-                    loginModel.password = passwordField.text
-                    RealmManagerTool.shareManager().addObject(object: loginModel, .login)
+                    if usernameField.text == "123" {
+                        let loginModel = LoginModel()
+                        loginModel.username = usernameField.text
+                        loginModel.password = passwordField.text
+                        loginModel.adminuser = "0"
+                        RealmManagerTool.shareManager().addObject(object: loginModel, .login)
+                    
+                    }else{
+                        let loginModel = LoginModel()
+                        loginModel.username = usernameField.text
+                        loginModel.password = passwordField.text
+                        loginModel.adminuser = "1"
+                        RealmManagerTool.shareManager().addObject(object: loginModel, .login)
+                    }
                     //跳转首页
                     if let appDelegate = UIApplication.shared.delegate as? AppDelegate  {
                         let rootvc = BaseTabBarController()
                         appDelegate.window?.rootViewController = rootvc
                     }
+                
                     
                 }else{//不存在
                     CustomProgressHud.showError(withStatus: "The user does not exist or the password is incorrect！")

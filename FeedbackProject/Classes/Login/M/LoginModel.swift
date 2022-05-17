@@ -16,6 +16,9 @@ class LoginModel: Object {
     @objc dynamic var password: String?
     
     @objc dynamic var username: String?
+    
+    @objc dynamic var adminuser: String?  //admin user 0 "normal user" 1
+    
     // 主键
     override class func primaryKey() -> String? {
         return "ID"

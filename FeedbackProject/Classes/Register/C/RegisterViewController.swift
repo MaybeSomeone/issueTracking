@@ -104,8 +104,8 @@ class RegisterViewController: BaseViewController {
             let loginModel = RegisterModel()
             loginModel.username = usernameField.text
             loginModel.password = passwordField.text
-            RealmManagerTool.shareManager().addObject(object: loginModel, .register)
-            
+//            RealmManagerTool.shareManager().addObject(object: loginModel, .register)
+            RealmManagerTool.shareManager().addObjects(by: [loginModel], .register)
             navigationController?.popViewController(animated: true)
         }else{
             CustomProgressHud.showError(withStatus: "The passwords are not the same. Please reset them ！")

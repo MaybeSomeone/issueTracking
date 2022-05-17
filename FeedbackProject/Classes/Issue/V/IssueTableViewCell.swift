@@ -15,7 +15,14 @@ class IssueTableViewCell: UITableViewCell {
             idLabel.text = model?.ID
             titleLabel.text = model?.title
             assginLabel.text = model?.assignee
-            statusLabel.text = model?.status
+            
+            if model?.status == "0" {
+                statusLabel.text = "Open"
+            }else if model?.status == "1"{
+                statusLabel.text = "Resolved"
+            }else {
+                statusLabel.text = "Closed"
+            }
         }
     }
     

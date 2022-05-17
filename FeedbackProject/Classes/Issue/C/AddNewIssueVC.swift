@@ -109,6 +109,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
     
     lazy var issueIdShowLabel: UILabel = {
        let label = UILabel()
+        label.isHidden = true
         return label
     }()
     
@@ -410,6 +411,7 @@ class AddNewIssueVC: BaseViewController, UITextFieldDelegate, UIPickerViewDelega
         issueLine.translatesAutoresizingMaskIntoConstraints = false
 
         issueIdLable.text = "issue ID:"
+        issueIdLable.isHidden = true
         let issueIdString = "100\(arc4random_uniform(100) + 1)"
         issueIdShowLabel.text = issueIdString
         requestMode.issueId = issueIdString

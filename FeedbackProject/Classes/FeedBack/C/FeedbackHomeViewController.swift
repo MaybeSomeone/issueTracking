@@ -320,7 +320,7 @@ class FeedbackHomeViewController: WMPageController {
         self.menuViewStyle = .line
         self.scrollEnable = false
         
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             self.progressColor = .clear
         }
     }
@@ -364,14 +364,14 @@ extension FeedbackHomeViewController {
     }
     
     override func numbersOfChildControllers(in inpageController: WMPageController) -> Int {
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             return 1
         }
         return 2
     }
     
     override func pageController(_ pageController: WMPageController, titleAt index: Int) -> String {
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             return ["Feedback"][index]
         }
         return ["Feedback","Report"][index]
@@ -379,7 +379,7 @@ extension FeedbackHomeViewController {
     
     override func pageController(_ pageController: WMPageController, viewControllerAt index: Int) -> UIViewController {
         
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             switch index {
             case 0 :
                 return feedbackVC

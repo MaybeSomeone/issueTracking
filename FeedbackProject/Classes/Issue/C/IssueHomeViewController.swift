@@ -25,7 +25,7 @@ class IssueHomeViewController: WMPageController {
         self.menuViewLayoutMode = .center
         self.menuViewStyle = .line
         self.scrollEnable = false
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             self.progressColor = .clear
         }
     }
@@ -61,8 +61,7 @@ class IssueHomeViewController: WMPageController {
         addNewIssueVC.hidesBottomBarWhenPushed = true
         addNewIssueVC.addNewIssueComplete = {[weak self] newModel in
             guard let weakself = self else { return }
-            print(newModel)
-            
+//            print(newModel)
             weakself.issueVC.dataArr.removeAll()
             let data = RealmManagerTool.shareManager().queryObjects(objectClass: IssueModel.self, .issue)
             for model in data.reversed() {
@@ -82,14 +81,14 @@ extension IssueHomeViewController {
     }
     
     override func numbersOfChildControllers(in inpageController: WMPageController) -> Int {
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             return 1
         }
         return 2
     }
     
     override func pageController(_ pageController: WMPageController, titleAt index: Int) -> String {
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             return ["Issue traking"][index]
         }
         return ["Issue traking","Report"][index]
@@ -97,7 +96,7 @@ extension IssueHomeViewController {
     
     override func pageController(_ pageController: WMPageController, viewControllerAt index: Int) -> UIViewController {
         
-        if LoginAdminPower.isAdmin() {
+        if !LoginAdminPower.isAdmin() {
             switch index {
             case 0 :
                 return issueVC

@@ -124,7 +124,7 @@ class LoginViewController: BaseViewController {
         }
         
         //验证用户是否存在
-        let registerList = RealmManagerTool.shareManager().queryObjects(objectClass: RegisterModel.self,filter: "ID = 'register'",.register)
+        let registerList = RealmManagerTool.shareManager().queryObjects(objectClass: RegisterModel.self,.register)
         
         
         if registerList.count > 0 {
@@ -151,10 +151,6 @@ class LoginViewController: BaseViewController {
                         let rootvc = BaseTabBarController()
                         appDelegate.window?.rootViewController = rootvc
                     }
-                
-                    
-                }else{//不存在
-                    CustomProgressHud.showError(withStatus: "The user does not exist or the password is incorrect！")
                 }
             }
         }else {//不存在
